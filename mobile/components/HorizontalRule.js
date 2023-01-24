@@ -7,7 +7,7 @@ function HorizontalRule() {
         borderBottomColor: 'blue',
         borderBottomWidth: 5,
         marginTop: 15,
-        marginBottom: 15
+        marginBottom: 15,
       }}
     />
   )

@@ -13,7 +13,7 @@ function LogInScreen({ navigation }) {
 			<View style={logInStyles.logInView}>
 				<Text style={logInStyles.title}>FLATLY</Text>
 				<HorizontalRule/>
-				<Text>
+				<Text style={logInStyles.subtitle}>
 					Handling apartment bookings has never been that easy...
 				</Text>
 				<HorizontalRule/>

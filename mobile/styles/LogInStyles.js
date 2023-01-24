@@ -5,10 +5,15 @@ export const logInStyles = StyleSheet.create({
     margin: (0, 35),
     padding: (0, 40),
     backgroundColor: 'white',
-    borderRadius: 25,
+    borderRadius: 25
   },
   title: {
-    fontSize: 45,
+    fontSize: 50,
+    textAlign: 'center'
+  },
+  subtitle: {
+    fontSize: 20,
     textAlign: 'center',
+    fontStyle: 'italic'
   }
 });
