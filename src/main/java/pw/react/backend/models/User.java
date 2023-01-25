@@ -6,9 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +20,12 @@ public class User implements UserDetails {
     private String password;
     @Column
     private String email;
+
+    @OneToMany(mappedBy="admin")
+    private Set<Booking> bookings;
+
+    @OneToMany(mappedBy="owner")
+    private Set<Offer> offers;
 
     public Long getId() {
         return id;
@@ -77,5 +84,19 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
+                + ", bookings=" + bookings + ", offers=" + offers + "]";
     }
 }

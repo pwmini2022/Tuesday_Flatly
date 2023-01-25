@@ -29,3 +29,6 @@ mvnw.cmd
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 !.elasticbeanstalk/saved_configs
+
+# VScode
+.vscode

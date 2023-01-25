@@ -66,6 +66,16 @@ public class MainConfig {
     }
 
     @Bean
+    public IBookingService bookingService(BookingRepository bookingRepository) {
+        return new BookingService(bookingRepository);
+    }
+
+    @Bean
+    public IOfferService offerService(OfferRepository offerRepository) {
+        return new OfferService(offerRepository);
+    }
+
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         getCorsUrls();
         return new WebMvcConfigurer() {
