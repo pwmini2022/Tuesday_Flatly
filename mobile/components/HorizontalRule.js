@@ -1,11 +1,11 @@
 import { View } from 'react-native';
 
-function HorizontalRule() {
+function HorizontalRule(props) {
   return (
     <View
       style={{
-        borderBottomColor: 'blue',
-        borderBottomWidth: 5,
+        borderBottomColor: props.color,
+        borderBottomWidth: props.width,
         marginTop: 15,
         marginBottom: 15,
       }}
