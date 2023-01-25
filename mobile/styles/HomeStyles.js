@@ -14,4 +14,8 @@ export const homeStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white'
   },
+  iconWrap: {
+    flex: 1,
+    alignItems: 'center'
+  }
 });

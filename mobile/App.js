@@ -20,7 +20,7 @@ function App() {
   } else {
     return (
       <NavigationContainer>
-        <Navigator initialRouteName="LogInScreen" screenOptions={{ headerShown: false}}>
+        <Navigator initialRouteName="HomeScreen" screenOptions={{ headerShown: false}}>
           <Screen name="LogInScreen" component={LogInScreen}/>
           <Screen name="HomeScreen" component={HomeScreen}/>
         </Navigator>
