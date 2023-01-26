@@ -17,7 +17,7 @@ function LogInScreen({ navigation }) {
 
 		/* TODO */
 		if (username === 'user123' && password === 'password') {
-			navigation.navigate('HomeScreen', {name: 'user123'})
+			navigation.navigate('FlatsScreen', {name: 'user123'})
 		}
 		else {
 			setBorderColorUsername('red');

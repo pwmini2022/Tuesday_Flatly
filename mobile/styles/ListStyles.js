@@ -19,8 +19,7 @@ export const listStyles = StyleSheet.create({
     margin: 20,
     padding: 20,
     borderRadius: 15,
-    width: '90%',
-    justifyContent: 'flex-end'
+    width: '90%'
   },
   itemWrap: {
     flexDirection: 'row'

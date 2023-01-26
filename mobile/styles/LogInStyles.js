@@ -26,20 +26,22 @@ export const logInStyles = StyleSheet.create({
     fontFamily: 'SourceSansPro-Regular',
     textAlign: 'center',
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 15
   },
   field: {
     fontSize: 18,
     fontFamily: 'Rubik-Regular',
     borderBottomWidth: 2,
     padding: 0,
+    marginTop: 5,
     marginBottom: 5
   },
   logInButton: {
     color: PURPLE,
     fontSize: 15,
     margin: 40,
-    fontFamily: 'Rubik-Regular'
+    fontFamily: 'Rubik-Regular',
+    marginTop: 10
   },
   forgotPassword: {
     textAlign: 'center',
