@@ -8,6 +8,7 @@ function HorizontalRule(props) {
         borderBottomWidth: props.width,
         marginTop: 15,
         marginBottom: 15,
+        borderRadius: 15
       }}
     />
   )

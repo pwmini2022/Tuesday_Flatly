@@ -1,19 +1,18 @@
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { appStyles } from '../styles/AppStyles.js';
 import { homeStyles } from '../styles/HomeStyles.js';
-import HorizontalRule from './HorizontalRule.js';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
+import FlatsList from './FlatsList';
 
-
-function HomeScreen({navigation}) {
+function HomeScreen({ navigation }) {
   const iconSize = 50;
   const iconColor = 'white';
 
   function logOut() {
-    navigation.navigate('LogInScreen');
+    navigation.navigate('LogInScreen', {});
   }
 
   return (
@@ -21,8 +20,8 @@ function HomeScreen({navigation}) {
       <View style={[appStyles.centerView, {paddingTop: 35}]}>
         <Text style={homeStyles.title}>FLATLY</Text>
       </View>
-      <View style={{flex: 7}}>
-        
+      <View style={homeStyles.contentWrap}>
+        <FlatsList/>
       </View>
       <View style={[appStyles.centerView, {flexDirection: 'row', alignItems: 'center'}]}>
         <View style={homeStyles.iconWrap}>

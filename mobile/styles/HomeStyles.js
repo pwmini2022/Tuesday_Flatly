@@ -17,5 +17,9 @@ export const homeStyles = StyleSheet.create({
   iconWrap: {
     flex: 1,
     alignItems: 'center'
+  },
+  contentWrap: {
+    flex: 7,
+    backgroundColor: 'white'
   }
 });

@@ -1,0 +1,31 @@
+[
+    {
+        "id": 1,
+        "name": "Apartment 1",
+        "location": "Location 1",
+        "description": "Some description here...\n and some more here...\n and more...",
+        "picture1": "https://www.apartments.com/images/librariesprovider2/blank-images/zen-hollywood-los-angeles-ca-pool940d82fe-44af-4b78-9ab9-5509783a8b57.jpg?sfvrsn=e148c311_1",
+        "picture2": "https://www.apartments.com/images/default-source/2019-naa/parkline-apartment-in-miami-fla2dc2731-e6f2-4dca-89c5-38245ccacea1.tmb-featuredim.jpg?sfvrsn=55bc41ed_1",
+        "picture3": "https://www.apartments.com/images/librariesprovider2/blank-images/alexan-waterloo-austin-tx-pet-washing-station4e6f56bb-419f-431f-89e3-965ba1671189.jpg?sfvrsn=67af5795_1"
+    }
+    ,
+    {
+        "id": 2,
+        "name": "Apartment 2",
+        "location": "Location 2",
+        "description": "Some description here...\n and some more here...\n and more...",
+        "picture1": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YXBhcnRtZW50fGVufDB8fDB8fA%3D%3D&w=1000&q=80",
+        "picture2": "https://www.aveliving.com/AVE/media/Property_Images/Florham%20Park/hero/flor-apt-living-(2)-hero.jpg?ext=.jpg",
+        "picture3": "https://www.bhg.com/thmb/SMaE_k1VWTL1nMBbzQu4BsijTAg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/white-green-bathroom-f3048fe3-8de9a696e00848eb8f3ebe15502a5beb.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Apartment 3",
+        "location": "Location 3",
+        "description": "Some description here...\n and some more here...\n and more...",
+        "picture1": "https://images.unsplash.com/photo-1460317442991-0ec209397118?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+        "picture2": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+        "picture3": "https://images.unsplash.com/photo-1502672023488-70e25813eb80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+    }
+]
+

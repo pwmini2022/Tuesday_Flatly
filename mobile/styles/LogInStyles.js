@@ -40,5 +40,20 @@ export const logInStyles = StyleSheet.create({
     fontSize: 15,
     margin: 40,
     fontFamily: 'Rubik-Regular'
+  },
+  forgotPassword: {
+    textAlign: 'center',
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 16,
+    color: PURPLE,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline'
+  },
+  info: {
+    fontSize: 16,
+    fontFamily: 'SourceSansPro-Regular',
+    textAlign: 'center',
+    color: 'green',
+    marginBottom: 10
   }
 });
