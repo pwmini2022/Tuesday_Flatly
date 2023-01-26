@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { appStyles } from '../styles/AppStyles.js';
 import { homeStyles } from '../styles/HomeStyles.js';
 
