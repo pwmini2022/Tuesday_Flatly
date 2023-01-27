@@ -56,7 +56,7 @@ public class WebJwtSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                //.cors().disable()
+                .cors().disable()
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 // make sure we use stateless session; session won't be used to store user's state.
