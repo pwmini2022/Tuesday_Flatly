@@ -21,7 +21,7 @@ public class Booking implements Serializable {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn(name="admin_id", nullable=false)
+    @JoinColumn(name="owner_id", nullable=false)
     private User admin;
 
     @ManyToOne

@@ -100,29 +100,21 @@ public class UserMainService implements UserService {
     public Optional<Collection<OfferDto>> getAllOffers(Long id) {
         Optional<User> maybeUser = userRepository.findById(id);
 
-        if (maybeUser.isPresent()) {
-            return Optional.of(maybeUser.get()
-                    .getOffers()
-                    .stream()
-                    .map(OfferDto::valueFrom)
-                    .toList());
-        }
-
-        return Optional.empty();
+        return maybeUser.isPresent() ? Optional.of(maybeUser.get()
+                .getOffers()
+                .stream()
+                .map(OfferDto::valueFrom)
+                .toList()) : Optional.empty();
     }
 
     @Override
     public Optional<Collection<BookingDto>> getAllBookings(Long id) {
         Optional<User> maybeUser = userRepository.findById(id);
 
-        if (maybeUser.isPresent()) {
-            return Optional.of(maybeUser.get()
-                    .getBookings()
-                    .stream()
-                    .map(BookingDto::valueFrom)
-                    .toList());
-        }
-
-        return Optional.empty();
+        return maybeUser.isPresent() ? Optional.of(maybeUser.get()
+                .getBookings()
+                .stream()
+                .map(BookingDto::valueFrom)
+                .toList()) : Optional.empty();
     }
 }
