@@ -5,19 +5,23 @@ import { GREENISH_BLUE, TURQUOISE } from '../styles/Colors';
 import { logInStyles } from '../styles/LogInStyles';
 import Button from './Button';
 import FloatingScreen from './FloatingScreen';
+import { useRecoilState } from 'recoil';
+import { user } from '../recoil/recoil';
 
 function LogInScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 	const [borderColorUsername, setBorderColorUsername] = useState("lightgray");
 	const [borderColorPassword, setBorderColorPassword] = useState("lightgray");
+	const setLoggedInUser = useRecoilState(user)[1];
 
 	function logIn() {
 		Keyboard.dismiss();
 
 		/* TODO */
 		if (username === 'user123' && password === 'password') {
-			navigation.navigate('FlatsScreen', {name: 'user123'})
+			setLoggedInUser({username: 'user123', email: 'user123@gmail.com'})
+			navigation.navigate('FlatsScreen')
 		}
 		else {
 			setBorderColorUsername('red');

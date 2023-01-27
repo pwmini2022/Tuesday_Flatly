@@ -22,6 +22,10 @@ function HomeScreen(props) {
     props.navigation.navigate('BookingsScreen')
   }
 
+  function toProfileScreen() {
+    props.navigation.navigate('ProfileScreen')
+  }
+
   return (
     <>
       <View style={[appStyles.centerView, {paddingTop: 35}]}>
@@ -32,7 +36,7 @@ function HomeScreen(props) {
       </View>
       <View style={[appStyles.centerView, {flexDirection: 'row', alignItems: 'center'}]}>
         <View style={homeStyles.iconWrap}>
-          <AwesomeIcon name="user-circle" size={iconSize} color={iconColor}/>
+          <AwesomeIcon name="user-circle" size={iconSize} color={iconColor} onPress={toProfileScreen}/>
         </View>
         <View style={homeStyles.iconWrap}>
           <MaterialIcon name="apartment" size={iconSize} color={iconColor} onPress={toFlatsScreen}/>

@@ -23,7 +23,7 @@ function BookingsScreen({ navigation }) {
             uri: 'asdas',
           }}
         />
-        <View style={{flex: 1, justifyContent: 'center', marginLeft: 10}}>
+        <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
           <Text style={[listStyles.details, {fontWeight: 'bold', fontSize: 16}]}>
             Booking {booking.id}
           </Text>

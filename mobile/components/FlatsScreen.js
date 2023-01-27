@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableHighlight } from 'react-native';
 import { listStyles } from '../styles/ListStyles';
 import { useState } from 'react';
 
@@ -17,13 +17,15 @@ function FlatsScreen({ navigation }) {
   const getFlatView = (flat) => (
     <View key={flat.id}>
       <View style={listStyles.itemWrap}>
-        <Image
-          style={listStyles.image}
-          source={{
-            uri: flat.picture1,
-          }}
-        />
-        <View style={{flex: 1, justifyContent: 'center', marginLeft: 10}}>
+        <TouchableHighlight onPress={() => navigation.navigate('FlatScreen', {flat: flat})}>
+          <Image
+            style={listStyles.image}
+            source={{
+              uri: flat.picture1,
+            }}
+          />
+        </TouchableHighlight>
+        <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
           <Text style={[listStyles.details, {fontWeight: 'bold', fontSize: 16}]}>
             {flat.name}
           </Text>
