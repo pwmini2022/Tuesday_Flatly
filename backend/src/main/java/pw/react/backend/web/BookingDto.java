@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 import pw.react.backend.models.Booking;
 import pw.react.backend.models.Offer;
-import pw.react.backend.models.User;
 
 public record BookingDto(String uuid,
                         long admin_id,
@@ -27,7 +26,7 @@ public record BookingDto(String uuid,
         return new BookingDto(booking.getUuid(), booking.getAdmin().getId(), booking.getOffer().getId(), booking.getStartDate(), booking.getEndDate(), booking.getFirstName(), booking.getLastName());
     }
 
-    public static Booking convertToBooking(BookingDto bookingDto) { // suus
+    public static Booking convertToBooking(BookingDto bookingDto) {
         Booking booking = new Booking();
 
         booking.setUuid(bookingDto.uuid());
@@ -39,12 +38,12 @@ public record BookingDto(String uuid,
         return booking;
     }
 
-    public static Booking convertToBooking(BookingDto bookingDto, Offer offer, User admin) {
+    public static Booking convertToBooking(BookingDto bookingDto, Offer offer) {
         Booking booking = new Booking();
 
         booking.setUuid(bookingDto.uuid());
         booking.setOffer(offer);
-        booking.setAdmin(admin);
+        booking.setAdmin(offer.getOwner());
         booking.setStartDate(bookingDto.startDate());
         booking.setEndDate(bookingDto.endDate());
         booking.setFirstName(bookingDto.first_name());

@@ -79,14 +79,10 @@ class OfferService implements IOfferService {
     public Optional<Collection<BookingDto>> getAllBookings(Long id) {
         Optional<Offer> maybeOffer = offerRepository.findById(id);
 
-        if (maybeOffer.isPresent()) {
-            return Optional.of(maybeOffer.get()
-                    .getBookings()
-                    .stream()
-                    .map(BookingDto::valueFrom)
-                    .toList());
-        }
-
-        return Optional.empty();
+        return maybeOffer.isPresent() ? Optional.of(maybeOffer.get()
+                .getBookings()
+                .stream()
+                .map(BookingDto::valueFrom)
+                .toList()) : Optional.empty();
     }
 }

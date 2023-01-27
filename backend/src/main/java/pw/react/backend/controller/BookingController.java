@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +21,6 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 import pw.react.backend.models.Offer;
-import pw.react.backend.models.User;
 import pw.react.backend.models.Booking;
 import pw.react.backend.services.IBookingService;
 import pw.react.backend.services.IOfferService;
@@ -101,22 +99,15 @@ public class BookingController {
         if (maybeOffer.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        Optional<User> maybeUser = userService.findById(maybeOffer.get().getOwner().getId());
 
-        if (maybeUser.isPresent()) {
-            List<Booking> createdBookings = bookings.stream()
-                    .map((BookingDto dto) -> BookingDto.convertToBooking(dto, maybeOffer.get(), maybeUser.get()))
-                    .toList();
-            List<BookingDto> result = repository.saveAll(createdBookings)
-                    .stream()
-                    .map(BookingDto::valueFrom)
-                    .toList();
-            return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } else {
-            // foreign key restriction shouldn't allow this to possible, right?
-            // maybe we could use a different exception class though...
-            throw new EntityNotFoundException("What?? Ownerless offer? This shouldn't be possible!");
-        }
+        List<Booking> createdBookings = bookings.stream()
+                .map((BookingDto dto) -> BookingDto.convertToBooking(dto, maybeOffer.get()))
+                .toList();
+        List<BookingDto> result = repository.saveAll(createdBookings)
+                .stream()
+                .map(BookingDto::valueFrom)
+                .toList();
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @Operation(summary = "Update a booking")

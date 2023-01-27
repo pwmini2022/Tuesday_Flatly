@@ -1,6 +1,5 @@
 package pw.react.backend.services;
 
-import org.hibernate.transform.ToListResultTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class UserMainService implements UserService {
     private static final Logger log = LoggerFactory.getLogger(UserMainService.class);
@@ -103,29 +100,21 @@ public class UserMainService implements UserService {
     public Optional<Collection<OfferDto>> getAllOffers(Long id) {
         Optional<User> maybeUser = userRepository.findById(id);
 
-        if (maybeUser.isPresent()) {
-            return Optional.of(maybeUser.get()
-                    .getOffers()
-                    .stream()
-                    .map(OfferDto::valueFrom)
-                    .toList());
-        }
-
-        return Optional.empty();
+        return maybeUser.isPresent() ? Optional.of(maybeUser.get()
+                .getOffers()
+                .stream()
+                .map(OfferDto::valueFrom)
+                .toList()) : Optional.empty();
     }
 
     @Override
     public Optional<Collection<BookingDto>> getAllBookings(Long id) {
         Optional<User> maybeUser = userRepository.findById(id);
 
-        if (maybeUser.isPresent()) {
-            List<BookingDto> dtos = new ArrayList<BookingDto>();
-            for (Offer offer : maybeUser.get().getOffers()) {
-                dtos.addAll(offerService.getAllBookings(offer.getId()).get());
-            }
-            return Optional.of(dtos);
-        }
-
-        return Optional.empty();
+        return maybeUser.isPresent() ? Optional.of(maybeUser.get()
+                .getBookings()
+                .stream()
+                .map(BookingDto::valueFrom)
+                .toList()) : Optional.empty();
     }
 }

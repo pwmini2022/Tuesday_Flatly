@@ -12,7 +12,6 @@ import pw.react.backend.models.CompanyLogo;
 import java.io.IOException;
 
 class CompanyLogoService implements LogoService {
-
     private final Logger logger = LoggerFactory.getLogger(CompanyLogoService.class);
 
     private final CompanyLogoRepository repository;
