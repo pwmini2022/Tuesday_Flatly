@@ -12,4 +12,3 @@ public interface IOfferService {
     Optional<Offer> findById(Long id);
     Optional<Collection<BookingDto>> getAllBookings(Long id);
 }
-

@@ -7,6 +7,7 @@ import Button from './Button';
 import FloatingScreen from './FloatingScreen';
 import { useRecoilState } from 'recoil';
 import { user } from '../recoil/recoil';
+import { login, OK } from './utils/apiCalls';
 
 function LogInScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -15,15 +16,21 @@ function LogInScreen({ navigation }) {
 	const [borderColorPassword, setBorderColorPassword] = useState("lightgray");
 	const setLoggedInUser = useRecoilState(user)[1];
 
-	function logIn() {
+	async function checkCredentials() {
 		Keyboard.dismiss();
 
-		/* TODO */
-		if (username === 'user123' && password === 'password') {
-			setLoggedInUser({username: 'user123', email: 'user123@gmail.com'})
-			navigation.navigate('FlatsScreen')
+		try {
+			const response = await login(username, password);
+			console.log(response);
+			const user = {
+				username: username,
+				password: password,
+				token: response.jwttoken
+			}
+			setLoggedInUser(user);
+			navigation.navigate('FlatsScreen');
 		}
-		else {
+		catch {
 			setBorderColorUsername('red');
 			setBorderColorPassword('red');
 		}
@@ -63,7 +70,7 @@ function LogInScreen({ navigation }) {
 				style={[logInStyles.field, {borderBottomColor: borderColorPassword}]}
 			/>
 		</ScrollView>
-		<Button text="LOG IN" onPress={logIn} color={GREENISH_BLUE}/>
+		<Button text="LOG IN" onPress={checkCredentials} color={GREENISH_BLUE}/>
 		<TouchableOpacity onPress={toForgotPasswordScreen} style={{marginTop: 15}}>
 			<Text style={logInStyles.forgotPassword}>Forgot your password?</Text>
 		</TouchableOpacity>
