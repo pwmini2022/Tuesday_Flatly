@@ -7,7 +7,7 @@ const JWT = 'YOUR_TOKEN'
 // Login
 
 export const login = async (uname, pwd) => {
-    return await fetch(`${BASE_URL}/auth/login`, {
+    response = await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -15,16 +15,9 @@ export const login = async (uname, pwd) => {
             "password": pwd
         })
     })
-        .then(response => {
-            if (response.ok){
-                return response.json();
-            } else {
-                throw response;
-            }
-        })
-        .catch(error => {
-            console.error(JSON.stringify(error));
-        })
+
+    data = await response.json()
+    return data.jwttoken;
 }
 
 // GET methods
