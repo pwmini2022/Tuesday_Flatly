@@ -1,12 +1,13 @@
-const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io';
+const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io'
+const JWT = 'YOUR_TOKEN'
 
 // POST to /auth/login (username: "bruh1", "bruh2" or "bruh3", password: "moment") and get keep the token somewhere
 // then send the token in the Authorization header as "Bearer ..."
 
 // Login
 
-export const login = async (username, password) => {
-    response = await fetch(`${BASE_URL}/auth/login`, {
+export const login = async (uname, pwd) => {
+    return await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -14,9 +15,16 @@ export const login = async (username, password) => {
             "password": pwd
         })
     })
-
-    data = await response.json()
-    return data.jwttoken;
+        .then(response => {
+            if (response.ok){
+                return response.json();
+            } else {
+                throw response;
+            }
+        })
+        .catch(error => {
+            console.error(JSON.stringify(error));
+        })
 }
 
 // GET methods
