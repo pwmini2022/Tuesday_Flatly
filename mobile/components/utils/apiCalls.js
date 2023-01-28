@@ -6,7 +6,7 @@ const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io
 // Login
 
 export const login = async (username, password) => {
-    return await fetch(`${BASE_URL}/auth/login`, {
+    response = await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
