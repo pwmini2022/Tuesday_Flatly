@@ -76,6 +76,11 @@ public class MainConfig {
     }
 
     @Bean
+    public IOfferImageService offerImageService(OfferImageRepository offerImageRepository) {
+        return new OfferImageService(offerImageRepository);
+    }
+
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         getCorsUrls();
         return new WebMvcConfigurer() {

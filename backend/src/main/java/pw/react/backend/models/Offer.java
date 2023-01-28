@@ -13,11 +13,14 @@ public class Offer implements Serializable {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="owner_id", nullable=false)
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    @OneToMany(mappedBy="offer")
+    @OneToMany(mappedBy = "offer")
     private Set<Booking> bookings;
+
+    @OneToMany(mappedBy = "offer")
+    private Set<OfferImage> images;
 
     @Column
     private String location;
@@ -92,6 +95,10 @@ public class Offer implements Serializable {
 
     public Set<Booking> getBookings() {
         return bookings;
+    }
+
+    public Set<OfferImage> getImages() {
+        return images;
     }
 
     @Override
