@@ -6,13 +6,13 @@ const JWT = 'YOUR_TOKEN'
 
 // Login
 
-export const login = async (uname, pwd) => {
+export const login = async (username, password) => {
     return await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            "username": uname,
-            "password": pwd
+            "username": username,
+            "password": password
         })
     })
         .then(response => {
@@ -48,11 +48,7 @@ export const getOffers = async (ownerId) => {
 }
 
 export const getBookings = async (ownerId, offerId) => {
-    return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`, {
-        headers: {
-            Authorization: `Bearer ${JWT}`
-        }
-    })
+    return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`)
         .then(response => {
             if (response.ok){
                 return response.json();
@@ -71,10 +67,7 @@ export const postOffer = async (ownerId, offers) => {
     return await fetch(`${BASE_URL}/offers?ownerId=${ownerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(offers),
-        headers: {
-            Authorization: `Bearer ${JWT}`
-        }
+        body: JSON.stringify(offers)
     })
         .then(response => {
             if (response.ok){
@@ -92,10 +85,7 @@ export const postBooking = async (offerId, bookings) => {
     return await fetch(`${BASE_URL}/bookings?offerId=${offerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bookings),
-        headers: {
-            Authorization: `Bearer ${JWT}`
-        }
+        body: JSON.stringify(bookings)
     })
         .then(response => {
             if (response.ok){
@@ -115,10 +105,7 @@ export const putOffer = async (offerId, offer) => {
     return await fetch(`${BASE_URL}/offers?offerId=${offerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(offer),
-        headers: {
-            Authorization: `Bearer ${JWT}`
-        }
+        body: JSON.stringify(offer)
     })
         .then(response => {
             if (response.ok){
@@ -136,10 +123,7 @@ export const putBooking = async (bookingId, booking) => {
     await fetch(`${BASE_URL}/bookings?bookingUuid=${bookingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(booking),
-        headers: {
-            Authorization: `Bearer ${JWT}`
-        }
+        body: JSON.stringify(booking)
     })
         .then(response => {
             if (response.ok){
@@ -157,10 +141,7 @@ export const putBooking = async (bookingId, booking) => {
 
 export const deleteOffer = async (offerId) => {
     await fetch(`${BASE_URL}/offers?offerId=${offerId}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${JWT}`
-        }
+        method: 'DELETE'
     })
         .then(response => {
             if (response.ok){
@@ -176,10 +157,7 @@ export const deleteOffer = async (offerId) => {
 
 export const deleteBooking = async (bookingId) => {
     await fetch(`${BASE_URL}/bookings?bookingUuid=${bookingId}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${JWT}`
-        }
+        method: 'DELETE'
     })
         .then(response => {
             if (response.ok){
