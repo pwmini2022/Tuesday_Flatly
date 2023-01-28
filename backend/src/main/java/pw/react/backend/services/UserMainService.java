@@ -28,7 +28,7 @@ public class UserMainService implements UserService {
     }
 
     @Autowired
-    public void setUserService(IOfferService offerService) {
+    public void setOfferService(IOfferService offerService) {
         this.offerService = offerService;
     }
 

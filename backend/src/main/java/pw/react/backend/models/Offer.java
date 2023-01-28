@@ -19,6 +19,9 @@ public class Offer implements Serializable {
     @OneToMany(mappedBy="offer")
     private Set<Booking> bookings;
 
+    @OneToMany(mappedBy="offer")
+    private Set<OfferImage> images;
+
     @Column
     private String location;
 
@@ -92,6 +95,10 @@ public class Offer implements Serializable {
 
     public Set<Booking> getBookings() {
         return bookings;
+    }
+
+    public Set<OfferImage> getImages() {
+        return images;
     }
 
     @Override
