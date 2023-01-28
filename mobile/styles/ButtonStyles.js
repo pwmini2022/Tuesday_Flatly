@@ -15,7 +15,6 @@ export const buttonStyles = StyleSheet.create({
     fontSize: 18,
     color: "white",
     fontWeight: "bold",
-    alignSelf: "center",
-    fontFamily: 'Rubik-Regular'
+    alignSelf: "center"
   },
 });

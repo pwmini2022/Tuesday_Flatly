@@ -26,7 +26,7 @@ function FlatsScreen({ navigation }) {
           />
         </TouchableHighlight>
         <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
-          <Text style={[listStyles.details, {fontWeight: 'bold', fontSize: 16}]}>
+          <Text style={[listStyles.details, {fontFamily: 'SourceSansPro-Bold', fontSize: 16}]}>
             {flat.name}
           </Text>
           <Text style={listStyles.details}>

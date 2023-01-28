@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { GREENISH_BLUE, PURPLE } from './Colors';
+import { GREENISH_BLUE, DARK_BLUE } from './Colors';
 
 export const flatStyles = StyleSheet.create({
   name: {
@@ -17,5 +17,14 @@ export const flatStyles = StyleSheet.create({
     height: 100,
     marginLeft: 10,
     marginBottom: 10
+  },
+  field: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 17,
+    marginBottom: 5
+  },
+  fieldTitle: {
+    fontFamily: 'SourceSansPro-SemiBold',
+    color: DARK_BLUE
   }
 });

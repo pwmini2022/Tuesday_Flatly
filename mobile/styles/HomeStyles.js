@@ -8,10 +8,9 @@ export const homeStyles = StyleSheet.create({
     flex: 1
   },
   title: {
-    fontSize: 50,
+    fontSize: 45,
     textAlign: 'center',
-    fontFamily: 'Rubik-Regular',
-    fontWeight: 'bold',
+    fontFamily: 'Rubik-Medium',
     color: 'white'
   },
   iconWrap: {

@@ -16,13 +16,11 @@ export const profileStyles = StyleSheet.create({
     borderRadius: 15
   },
   header: {
-    fontFamily: 'SourceSansPro-Regular',
+    fontFamily: 'SourceSansPro-Bold',
     fontSize: 26,
-    fontWeight: 'bold',
     color: PURPLE
   },
   fieldTitle: {
-    fontFamily: 'Rubik-Regular',
     fontWeight: 'bold',
     marginBottom: 5,
     fontSize: 18

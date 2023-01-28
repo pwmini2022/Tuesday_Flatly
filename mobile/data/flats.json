@@ -4,6 +4,7 @@
         "name": "Apartment 1",
         "location": "Location 1",
         "description": "Some description here...\n and some more here...\n and more...",
+        "pricePerNight": 123,
         "picture1": "https://www.apartments.com/images/librariesprovider2/blank-images/zen-hollywood-los-angeles-ca-pool940d82fe-44af-4b78-9ab9-5509783a8b57.jpg?sfvrsn=e148c311_1",
         "picture2": "https://www.apartments.com/images/default-source/2019-naa/parkline-apartment-in-miami-fla2dc2731-e6f2-4dca-89c5-38245ccacea1.tmb-featuredim.jpg?sfvrsn=55bc41ed_1",
         "picture3": "https://www.apartments.com/images/librariesprovider2/blank-images/alexan-waterloo-austin-tx-pet-washing-station4e6f56bb-419f-431f-89e3-965ba1671189.jpg?sfvrsn=67af5795_1"
@@ -13,6 +14,7 @@
         "id": 2,
         "name": "Apartment 2",
         "location": "Location 2",
+        "pricePerNight": 123,
         "description": "Some description here...\n and some more here...\n and more...",
         "picture1": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YXBhcnRtZW50fGVufDB8fDB8fA%3D%3D&w=1000&q=80",
         "picture2": "https://www.aveliving.com/AVE/media/Property_Images/Florham%20Park/hero/flor-apt-living-(2)-hero.jpg?ext=.jpg",
@@ -22,7 +24,8 @@
         "id": 3,
         "name": "Apartment 3",
         "location": "Location 3",
-        "description": "Some description here...\n and some more here...\n and more...",
+        "pricePerNight": 123,
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tristique ipsum blandit odio laoreet venenatis. Sed porta euismod erat, dapibus porttitor nisl ultrices in. Duis in placerat magna. Fusce tristique feugiat justo, ac porta arcu malesuada quis. Nulla facilisi. Suspendisse eget cursus nibh, eget fringilla tellus. Sed nibh odio, aliquet in odio eget, maximus iaculis lorem. Donec cursus sollicitudin quam, sed molestie velit suscipit id. Donec dolor arcu, iaculis id imperdiet at, venenatis ac augue. Aliquam sed diam purus.",
         "picture1": "https://images.unsplash.com/photo-1460317442991-0ec209397118?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
         "picture2": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
         "picture3": "https://images.unsplash.com/photo-1502672023488-70e25813eb80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
@@ -30,6 +33,7 @@
     {
         "id": 4,
         "name": "Apartment 4",
+        "pricePerNight": 123,
         "location": "Location 4",
         "description": "Some description here...\n and some more here...\n and more...",
         "picture1": "https://media.istockphoto.com/id/1322575582/photo/exterior-view-of-modern-apartment-building-offering-luxury-rental-units-in-silicon-valley.jpg?s=612x612&w=0&k=20&c=7ipOB2nGt7JB-rln2YM1wxQ2NI4ZZirsxSn8Ko9pk-k=",
@@ -40,6 +44,7 @@
         "id": 5,
         "name": "Apartment 5",
         "location": "Location 5",
+        "pricePerNight": 123,
         "description": "Some description here...\n and some more here...\n and more...",
         "picture1": "https://is1-2.housingcdn.com/4f2250e8/502ea72e6c69350e058145c5d8b9c2a8/v0/fs/tamil_nadu_housing_board_260_lig_flats_korattur-villivakkam-chennai-tamil_nadu_housing_board.jpeg",
         "picture2": "https://www.cascadebuildtech.com/wp-content/uploads/2019/12/2bhk-and-3bhk-flats-for-sale-Hero-homes-Mohali-Dining-room-cascade-buildtech.jpg",
