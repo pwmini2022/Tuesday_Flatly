@@ -1,10 +1,15 @@
-const BASE_URL = 'http://localhost:8080'
+const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io'
+const JWT = 'YOUR_TOKEN'
 
 
 // GET methods
 
 export const getOffers = async (ownerId) => {
-    return await fetch(`${BASE_URL}/offers?${ownerId ? `ownerId=${ownerId}` : ""}`)
+    return await fetch(`${BASE_URL}/offers?${ownerId ? `ownerId=${ownerId}` : ""}`, {
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
+    })
         .then(response => {
             if (response.ok){
                 return response.json();
