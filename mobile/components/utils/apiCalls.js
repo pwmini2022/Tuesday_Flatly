@@ -1,21 +1,19 @@
 const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io'
 const JWT = 'YOUR_TOKEN'
 
-const YOUR_PROFILE = {
-    "username": "uname",
-    "password": "pwd"
-}
-
 // POST to /auth/login (username: "bruh1", "bruh2" or "bruh3", password: "moment") and get keep the token somewhere
 // then send the token in the Authorization header as "Bearer ..."
 
 // Login
 
-export const login = async () => {
+export const login = async (uname, pwd) => {
     return await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(YOUR_PROFILE)
+        body: JSON.stringify({
+            "username": uname,
+            "password": pwd
+        })
     })
         .then(response => {
             if (response.ok){
@@ -50,7 +48,11 @@ export const getOffers = async (ownerId) => {
 }
 
 export const getBookings = async (ownerId, offerId) => {
-    return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`)
+    return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`, {
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
+    })
         .then(response => {
             if (response.ok){
                 return response.json();
@@ -69,7 +71,10 @@ export const postOffer = async (ownerId, offers) => {
     return await fetch(`${BASE_URL}/offers?ownerId=${ownerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(offers)
+        body: JSON.stringify(offers),
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
     })
         .then(response => {
             if (response.ok){
@@ -87,7 +92,10 @@ export const postBooking = async (offerId, bookings) => {
     return await fetch(`${BASE_URL}/bookings?offerId=${offerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bookings)
+        body: JSON.stringify(bookings),
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
     })
         .then(response => {
             if (response.ok){
@@ -107,7 +115,10 @@ export const putOffer = async (offerId, offer) => {
     return await fetch(`${BASE_URL}/offers?offerId=${offerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(offer)
+        body: JSON.stringify(offer),
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
     })
         .then(response => {
             if (response.ok){
@@ -125,7 +136,10 @@ export const putBooking = async (bookingId, booking) => {
     await fetch(`${BASE_URL}/bookings?bookingUuid=${bookingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(booking)
+        body: JSON.stringify(booking),
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
     })
         .then(response => {
             if (response.ok){
@@ -143,7 +157,10 @@ export const putBooking = async (bookingId, booking) => {
 
 export const deleteOffer = async (offerId) => {
     await fetch(`${BASE_URL}/offers?offerId=${offerId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
     })
         .then(response => {
             if (response.ok){
@@ -159,7 +176,10 @@ export const deleteOffer = async (offerId) => {
 
 export const deleteBooking = async (bookingId) => {
     await fetch(`${BASE_URL}/bookings?bookingUuid=${bookingId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
     })
         .then(response => {
             if (response.ok){
