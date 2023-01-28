@@ -1,5 +1,6 @@
-const BASE_URL = 'http://localhost:8080'
-
+const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io'
+// TODO: POST to /auth/login (username: "bruh1", "bruh2" or "bruh3", password: "moment") and get keep the token somewhere
+// then send the token in the Authorization header as "Bearer ..."
 
 // GET methods
 
