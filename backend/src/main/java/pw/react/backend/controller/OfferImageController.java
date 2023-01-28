@@ -45,9 +45,9 @@ public class OfferImageController {
         this.offerImageService = offerImageService;
     }
 
-    @PostMapping("")
+    @PostMapping("/{offerId}")
     public ResponseEntity<OfferImageInfo> uploadOfferImage(@RequestHeader HttpHeaders headers,
-            @RequestParam Long offerId,
+            @PathVariable Long offerId,
             @RequestParam("file") MultipartFile file) {
         logHeaders(headers);
 
@@ -57,9 +57,9 @@ public class OfferImageController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    @GetMapping("")
+    @GetMapping("/{offerImageUuid}")
     public ResponseEntity<Resource> getOfferImage(@RequestHeader HttpHeaders headers,
-            @RequestParam String offerImageUuid) {
+            @PathVariable String offerImageUuid) {
         logHeaders(headers);
         Optional<OfferImage> maybeOfferImage = offerImageService.findByUuid(offerImageUuid);
 
@@ -71,7 +71,7 @@ public class OfferImageController {
                 : ResponseEntity.badRequest().body(null);
     }
 
-    @GetMapping("/info")
+    @GetMapping("")
     public ResponseEntity<Collection<OfferImageInfo>> getOfferImagesInfo(@RequestHeader HttpHeaders headers,
             @RequestParam(required = false) Long offerId) {
         logHeaders(headers);
@@ -88,10 +88,10 @@ public class OfferImageController {
         }
     }
 
-    @DeleteMapping(value = "")
+    @DeleteMapping("/{offerImageUuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<String> deleteOfferImage(@RequestHeader HttpHeaders headers,
-            @RequestParam String offerImageUuid) {
+            @PathVariable String offerImageUuid) {
         logHeaders(headers);
         return offerImageService.deleteByUuid(offerImageUuid)
                 ? ResponseEntity.ok(String.format("Offer image [UUID: %s] deleted", offerImageUuid))
