@@ -11,13 +11,15 @@ import pw.react.backend.models.User;
 import pw.react.backend.services.UserService;
 import pw.react.backend.web.UserDto;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 
 @RestController
-@RequestMapping(path = "/users")
+@RequestMapping(path = JwtUserController.USERS_PATH)
 @Profile({"jwt"})
 public class JwtUserController {
-
+    public static final String USERS_PATH = "/logic/api/users";
     private static final Logger log = LoggerFactory.getLogger(JwtUserController.class);
 
     private final UserService userService;
@@ -40,5 +42,19 @@ public class JwtUserController {
         log.info("Password is going to be encoded.");
         userService.updatePassword(user, user.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(UserDto.valueFrom(user));
+    }
+
+    // not the most secure...
+    @GetMapping(path = "/{userId}")
+    public ResponseEntity<UserDto> getUser(@RequestBody UserDto userDto,
+        @PathVariable Long userId) {
+        Optional<User> maybeUser = userService.findById(userId);
+
+        if (maybeUser.isEmpty()) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        log.info("User info fetched.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserDto.valueFrom(maybeUser.get()));
     }
 }

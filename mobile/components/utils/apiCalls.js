@@ -29,10 +29,13 @@ export const login = async (username, password) => {
 
 // GET methods
 
-export const getOffers = async (ownerId) => {
+export const getOffers = async (token, ownerId) => {
+    console.log(token);
+    console.log(ownerId);
+    
     return await fetch(`${BASE_URL}/offers?${ownerId ? `ownerId=${ownerId}` : ""}`, {
         headers: {
-            Authorization: `Bearer ${JWT}`
+            Authorization: `Bearer ${token}`
         }
     })
         .then(response => {

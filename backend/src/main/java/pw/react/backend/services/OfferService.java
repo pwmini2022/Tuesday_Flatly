@@ -8,9 +8,14 @@ import pw.react.backend.models.Booking;
 import pw.react.backend.models.Offer;
 import pw.react.backend.models.User;
 import pw.react.backend.web.BookingDto;
+import pw.react.backend.web.OfferDto;
 import pw.react.backend.dao.OfferRepository;
+import pw.react.backend.dao.UserRepository;
+
+import static pw.react.backend.utils.MySimpleUtils.intevalIsValid;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,6 +25,12 @@ class OfferService implements IOfferService {
     private OfferRepository offerRepository;
     private IBookingService bookingService;
 
+    private UserRepository userRepository;
+    @Autowired
+    public void setOfferRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     OfferService() {
         /* Needed only for initializing spy in unit tests */ }
 
@@ -28,22 +39,22 @@ class OfferService implements IOfferService {
     }
 
     @Autowired
-    public void setUserService(IBookingService bookingService) {
+    public void setBookingService(IBookingService bookingService) {
         this.bookingService = bookingService;
     }
 
     @Override
-    public Optional<Offer> updateOffer(Long id, Offer updatedOffer) {
-        Optional<Offer> maybeOffer = offerRepository.findById(id);
+    public Optional<Offer> updateOffer(String uuid, Offer updatedOffer) {
+        Optional<Offer> maybeOffer = offerRepository.findById(uuid);
 
         if (maybeOffer.isPresent()) {
             User admin = maybeOffer.get().getOwner();
 
-            updatedOffer.setId(id);
+            updatedOffer.setUuid(uuid);
             updatedOffer.setOwner(admin);
 
             Offer result = offerRepository.save(updatedOffer);
-            logger.info("Offer [ID: {}] updated.", id);
+            logger.info("Offer [ID: {}] updated.", uuid);
             return Optional.of(result);
         }
 
@@ -51,8 +62,8 @@ class OfferService implements IOfferService {
     }
 
     @Override
-    public boolean deleteOffer(Long id) {
-        Optional<Offer> maybeOffer = offerRepository.findById(id);
+    public boolean deleteOffer(String uuid) {
+        Optional<Offer> maybeOffer = offerRepository.findById(uuid);
 
         if (maybeOffer.isPresent()) {
             Set<Booking> relatedBookings = maybeOffer.get().getBookings();
@@ -61,8 +72,8 @@ class OfferService implements IOfferService {
                 bookingService.deleteBooking(booking.getUuid());
             }
 
-            offerRepository.deleteById(id);
-            logger.info("Offer [ID: {}] deleted.", id);
+            offerRepository.deleteById(uuid);
+            logger.info("Offer [ID: {}] deleted.", uuid);
 
             return true;
         }
@@ -71,13 +82,38 @@ class OfferService implements IOfferService {
     }
 
     @Override
-    public Optional<Offer> findById(Long id) {
-        return offerRepository.findById(id);
+    public Optional<Collection<OfferDto>> saveAll(Collection<OfferDto> offers, Long ownerId) {
+        Optional<User> maybeUser = userRepository.findById(ownerId);
+
+        if (maybeUser.isEmpty()) {
+            return Optional.empty();
+        }
+        User user = maybeUser.get();
+
+        for (OfferDto dto : offers) {
+            if (!(intevalIsValid(dto.dateFrom(), dto.dateTo()))) {
+                return Optional.empty();
+            }
+        }
+
+        List<Offer> createdOffers = offers.stream()
+                .map((OfferDto dto) -> OfferDto.convertToOffer(dto, user)).toList();
+        List<OfferDto> result = offerRepository.saveAll(createdOffers)
+                .stream()
+                .map(OfferDto::valueFrom)
+                .toList();
+
+        return Optional.of(result);
     }
 
     @Override
-    public Optional<Collection<BookingDto>> getAllBookings(Long id) {
-        Optional<Offer> maybeOffer = offerRepository.findById(id);
+    public Optional<Offer> findById(String uuid) {
+        return offerRepository.findById(uuid);
+    }
+
+    @Override
+    public Optional<Collection<BookingDto>> getAllBookings(String uuid) {
+        Optional<Offer> maybeOffer = offerRepository.findById(uuid);
 
         return maybeOffer.isPresent() ? Optional.of(maybeOffer.get()
                 .getBookings()

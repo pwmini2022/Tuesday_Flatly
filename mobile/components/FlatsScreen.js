@@ -1,11 +1,14 @@
 import { View, Text, Image, TouchableHighlight } from 'react-native';
 import { listStyles } from '../styles/ListStyles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import FLATS from "../data/flats.json"
 import HorizontalRule from './HorizontalRule';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import HomeScreen from './HomeScreen';
+import { getOffers } from './utils/apiCalls';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { getUserToken } from '../recoil/recoil';
 
 function FlatsScreen({ navigation }) {
   const iconSize = 30;
@@ -13,6 +16,9 @@ function FlatsScreen({ navigation }) {
   const maxFlats = 3;
   const maxPages = Math.ceil(FLATS.length / maxFlats);
   const [page, setPage] = useState(0);
+  const token = useRecoilValue(getUserToken);
+  const [loading, setLoading] = useState(true);
+  const [flats, setFlats] = useState([]);
 
   const getFlatView = (flat) => (
     <View key={flat.id}>
@@ -38,22 +44,32 @@ function FlatsScreen({ navigation }) {
     </View>
   )
 
-  function getFlats() {
-    const flats = [];
+  const getFlatsView = () => {
+    const flatsInPage = [];
 
-    for (const flat of FLATS.slice(maxFlats*page, maxFlats*(page+1))) {
-      flats.push(getFlatView(flat));
+    for (const flat of flats.slice(maxFlats*page, maxFlats*(page+1))) {
+      flatsInPage.push(getFlatView(flat));
     }
     
-    return flats;
+    return flatsInPage;
   }
+
+  async function getFlats() {
+    setLoading(true);
+    setFlats(await getOffers(token))
+    setLoading(false);;
+  }
+
+  useEffect(() => {
+    getFlats();
+  }, []);
 
   const getContent = () => (
     <View style={listStyles.wrap}>
       <Text style={listStyles.header}>Check out all the flats:</Text>
       <View style={listStyles.listWrap}>
         <View style={{flex: 1}}>
-          {getFlats()}
+          {getFlatsView()}
         </View>
         <View style={listStyles.arrowsWrap}>
           <View style={{flex: 1}}>
@@ -79,7 +95,12 @@ function FlatsScreen({ navigation }) {
     </View>
   )
 
-  return <HomeScreen content={getContent()} navigation={navigation}/>
+  if (loading) {
+    return <Text>Loading...</Text>
+  }
+  else {
+    return <HomeScreen content={getContent()} navigation={navigation}/>
+  }
 }
 
 export default FlatsScreen;
