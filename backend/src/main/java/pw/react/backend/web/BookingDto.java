@@ -1,39 +1,34 @@
 package pw.react.backend.web;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import pw.react.backend.utils.JsonDateDeserializer;
-import pw.react.backend.utils.JsonDateSerializer;
-
-import java.time.LocalDateTime;
-
 import pw.react.backend.models.Booking;
 import pw.react.backend.models.Offer;
 
 public record BookingDto(String uuid,
                         long admin_id,
-                        long offer_id,
-                         @JsonDeserialize(using = JsonDateDeserializer.class) @JsonSerialize(using = JsonDateSerializer.class)
-                         LocalDateTime startDate,
-                         @JsonDeserialize(using = JsonDateDeserializer.class) @JsonSerialize(using = JsonDateSerializer.class)
-                         LocalDateTime endDate,
+                        String offer_uuid,
+                         long dateFrom,
+                         long dateTo,
                          String first_name,
-                         String last_name) {
+                         String last_name,
+                         long numberOfKids,
+                         long numberOfAdults) {
 
-    public static final BookingDto EMPTY = new BookingDto("", 0, 0, null, null, "", "");
+    public static final BookingDto EMPTY = new BookingDto("", 0, "", 0, 0, "", "", 0, 0);
 
     public static BookingDto valueFrom(Booking booking) {
-        return new BookingDto(booking.getUuid(), booking.getAdmin().getId(), booking.getOffer().getId(), booking.getStartDate(), booking.getEndDate(), booking.getFirstName(), booking.getLastName());
+        return new BookingDto(booking.getUuid(), booking.getAdmin().getId(), booking.getOffer().getUuid(), booking.getDateFrom(), booking.getDateTo(), booking.getFirstName(), booking.getLastName(), booking.getNumberOfKids(), booking.getNumberOfAdults());
     }
 
     public static Booking convertToBooking(BookingDto bookingDto) {
         Booking booking = new Booking();
 
         booking.setUuid(bookingDto.uuid());
-        booking.setStartDate(bookingDto.startDate());
-        booking.setEndDate(bookingDto.endDate());
+        booking.setDateFrom(bookingDto.dateFrom());
+        booking.setDateTo(bookingDto.dateTo());
         booking.setFirstName(bookingDto.first_name());
         booking.setLastName(bookingDto.last_name());
+        booking.setNumberOfKids(bookingDto.numberOfKids());
+        booking.setNumberOfAdults(bookingDto.numberOfAdults());
 
         return booking;
     }
@@ -44,10 +39,12 @@ public record BookingDto(String uuid,
         booking.setUuid(bookingDto.uuid());
         booking.setOffer(offer);
         booking.setAdmin(offer.getOwner());
-        booking.setStartDate(bookingDto.startDate());
-        booking.setEndDate(bookingDto.endDate());
+        booking.setDateFrom(bookingDto.dateFrom());
+        booking.setDateTo(bookingDto.dateTo());
         booking.setFirstName(bookingDto.first_name());
         booking.setLastName(bookingDto.last_name());
+        booking.setNumberOfKids(bookingDto.numberOfKids());
+        booking.setNumberOfAdults(bookingDto.numberOfAdults());
 
         return booking;
     }

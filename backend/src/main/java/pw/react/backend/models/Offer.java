@@ -1,16 +1,70 @@
 package pw.react.backend.models;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "offers")
 public class Offer implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String uuid;
+
+    private String name;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public Long getDateFrom() {
+        return dateFrom;
+    }
+
+    public void setDateFrom(Long dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public Long getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(Long dateTo) {
+        this.dateTo = dateTo;
+    }
+
+    public Long getNumberOfKids() {
+        return numberOfKids;
+    }
+
+    public void setNumberOfKids(Long numberOfKids) {
+        this.numberOfKids = numberOfKids;
+    }
+
+    public Long getNumberOfAdults() {
+        return numberOfAdults;
+    }
+
+    public void setNumberOfAdults(Long numberOfAdults) {
+        this.numberOfAdults = numberOfAdults;
+    }
+
+    private Long price;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
@@ -22,27 +76,22 @@ public class Offer implements Serializable {
     @OneToMany(mappedBy = "offer")
     private Set<OfferImage> images;
 
-    @Column
     private String location;
 
-    @Column
-    private LocalDateTime dateFrom;
+    private Long dateFrom;
 
-    @Column
-    private LocalDateTime dateTo;
+    private Long dateTo;
 
-    @Column
-    private int numberOfKids;
+    private Long numberOfKids;
 
-    @Column
-    private int numberOfAdults;
+    private Long numberOfAdults;
 
-    public long getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public User getOwner() {
@@ -61,38 +110,6 @@ public class Offer implements Serializable {
         this.location = location;
     }
 
-    public LocalDateTime getDateFrom() {
-        return dateFrom;
-    }
-
-    public void setDateFrom(LocalDateTime dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-
-    public LocalDateTime getDateTo() {
-        return dateTo;
-    }
-
-    public void setDateTo(LocalDateTime dateTo) {
-        this.dateTo = dateTo;
-    }
-
-    public int getNumberOfKids() {
-        return numberOfKids;
-    }
-
-    public void setNumberOfKids(int numberOfKids) {
-        this.numberOfKids = numberOfKids;
-    }
-
-    public int getNumberOfAdults() {
-        return numberOfAdults;
-    }
-
-    public void setNumberOfAdults(int numberOfAdults) {
-        this.numberOfAdults = numberOfAdults;
-    }
-
     public Set<Booking> getBookings() {
         return bookings;
     }
@@ -103,7 +120,8 @@ public class Offer implements Serializable {
 
     @Override
     public String toString() {
-        return "Offer [id=" + id + ", owner=" + owner + ", location=" + location + ", dateFrom=" + dateFrom
-                + ", dateTo=" + dateTo + ", numberOfKids=" + numberOfKids + ", numberOfAdults=" + numberOfAdults + "]";
+        return "Offer [uuid=" + uuid + ", name=" + name + ", price=" + price + ", owner=" + owner + ", bookings="
+                + bookings + ", images=" + images + ", location=" + location + ", dateFrom=" + dateFrom + ", dateTo="
+                + dateTo + ", numberOfKids=" + numberOfKids + ", numberOfAdults=" + numberOfAdults + "]";
     }
 }

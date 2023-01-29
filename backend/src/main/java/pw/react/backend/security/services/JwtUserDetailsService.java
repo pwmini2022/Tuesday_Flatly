@@ -1,9 +1,9 @@
 package pw.react.backend.security.services;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pw.react.backend.dao.UserRepository;
+import pw.react.backend.models.User;
 
 import java.util.Optional;
 
@@ -16,8 +16,8 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<pw.react.backend.models.User> user = userRepository.findByUsername(username);
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
             return user.get();
         } else {

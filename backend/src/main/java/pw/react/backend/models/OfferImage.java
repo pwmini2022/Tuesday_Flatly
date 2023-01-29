@@ -91,7 +91,7 @@ public class OfferImage {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(uuid, fileName, fileType, offer.getId());
+        int result = Objects.hash(uuid, fileName, fileType, offer.getUuid());
         result = 31 * result + Arrays.hashCode(data);
         return result;
     }
@@ -101,6 +101,6 @@ public class OfferImage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OfferImage that = (OfferImage) o;
-        return uuid == that.uuid && offer.getId() == that.offer.getId() && fileName.equals(that.fileName) && fileType.equals(that.fileType) && Arrays.equals(data, that.data);
+        return uuid == that.uuid && offer.getUuid() == that.offer.getUuid() && fileName.equals(that.fileName) && fileType.equals(that.fileType) && Arrays.equals(data, that.data);
     }
 }

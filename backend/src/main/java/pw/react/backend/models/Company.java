@@ -3,7 +3,6 @@ package pw.react.backend.models;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "company")
@@ -18,7 +17,7 @@ public class Company implements Serializable {
     @Column
     private String name;
     @Column(name = "start_date")
-    private LocalDateTime startDateTime;
+    private long startDateTime;
     /**
      * By default, the column name in the database is going to be board_members
      */
@@ -41,11 +40,11 @@ public class Company implements Serializable {
         this.name = name;
     }
 
-    public LocalDateTime getStartDateTime() {
+    public long getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(LocalDateTime startDateTime) {
+    public void setStartDateTime(long startDateTime) {
         this.startDateTime = startDateTime;
     }
 
