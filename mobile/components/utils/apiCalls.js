@@ -1,5 +1,4 @@
-const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io'
-const JWT = 'YOUR_TOKEN'
+const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io';
 
 // Login
 
