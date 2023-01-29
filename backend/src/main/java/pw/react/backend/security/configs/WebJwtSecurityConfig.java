@@ -69,7 +69,7 @@ public class WebJwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers( "/v3/api-docs/**", "/swagger-ui/**").permitAll()
 
                 // all other requests need to be authenticated
-                //.anyRequest().authenticated()
+                .anyRequest().authenticated()
                 ;
 
         // Add a filter to validate the tokens with every request

@@ -7,16 +7,17 @@ public record OfferDto(String uuid,
         long owner_id,
         String name,
         Long price,
+        String description,
         String location,
         Long dateFrom,
         Long dateTo,
         Long numberOfKids,
         Long numberOfAdults) {
 
-    public static final OfferDto EMPTY = new OfferDto("", 0, "", 0L, "", 0L, 0L, 0L, 0L);
+    public static final OfferDto EMPTY = new OfferDto("", 0, "", 0L, "", "", 0L, 0L, 0L, 0L);
 
     public static OfferDto valueFrom(Offer offer) {
-        return new OfferDto(offer.getUuid(), offer.getOwner().getId(), offer.getName(), offer.getPrice(), offer.getLocation(), offer.getDateFrom(), offer.getDateTo(), offer.getNumberOfKids(), offer.getNumberOfAdults());
+        return new OfferDto(offer.getUuid(), offer.getOwner().getId(), offer.getName(), offer.getPrice(), offer.getDescription(), offer.getLocation(), offer.getDateFrom(), offer.getDateTo(), offer.getNumberOfKids(), offer.getNumberOfAdults());
     }
 
     public static Offer convertToOffer(OfferDto offerDto) { // sus
@@ -25,6 +26,7 @@ public record OfferDto(String uuid,
         offer.setUuid(offerDto.uuid());
         offer.setName(offerDto.name());
         offer.setPrice(offerDto.price());
+        offer.setDescription(offerDto.description());
         offer.setLocation(offerDto.location());
         offer.setDateFrom(offerDto.dateFrom());
         offer.setDateTo(offerDto.dateTo());
@@ -40,6 +42,7 @@ public record OfferDto(String uuid,
         offer.setUuid(offerDto.uuid());
         offer.setName(offerDto.name());
         offer.setPrice(offerDto.price());
+        offer.setDescription(offerDto.description());
         offer.setOwner(admin);
         offer.setLocation(offerDto.location());
         offer.setDateFrom(offerDto.dateFrom());

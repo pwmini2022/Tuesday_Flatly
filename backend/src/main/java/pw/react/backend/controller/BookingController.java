@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Valid;
@@ -21,6 +24,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import pw.react.backend.models.Booking;
 import pw.react.backend.services.IBookingService;
@@ -126,7 +130,7 @@ public class BookingController {
             @ApiResponse(responseCode = "201", description = "Booking created"),
             @ApiResponse(responseCode = "400", description = "Admin doesn't exist")
     })
-    @PostMapping(path = "/{offerUuid}")
+    @PostMapping(path = {"/{offerUuid}"})
     public ResponseEntity<Collection<BookingDto>> createBookings(@RequestHeader HttpHeaders headers,
             @RequestBody List<BookingDto> bookings,
             @PathVariable String offerUuid) {
@@ -134,6 +138,22 @@ public class BookingController {
 
         Optional<Collection<BookingDto>> maybeSaved = bookingService.saveAll(bookings, offerUuid);
         return maybeSaved.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get())
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    @Operation(summary = "Create new booking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Booking created"),
+            @ApiResponse(responseCode = "400", description = "Admin doesn't exist")
+    })
+    @PostMapping(path = {""})
+    public ResponseEntity<BookingDto> createBooking(@RequestHeader HttpHeaders headers,
+            @RequestBody BookingDto booking) {
+        logHeaders(headers);
+
+        String offerUuid = booking.offer_uuid();
+        Optional<Collection<BookingDto>> maybeSaved = bookingService.saveAll(Arrays.asList(booking), offerUuid);
+        return maybeSaved.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get().iterator().next())
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 

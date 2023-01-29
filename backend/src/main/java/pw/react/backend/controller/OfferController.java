@@ -10,10 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.jsf.FacesContextUtils;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -199,17 +203,33 @@ public class OfferController {
         return ResponseEntity.ok(offerDtos);
     }
 
-    @Operation(summary = "Create new Offer")
+    @Operation(summary = "Create new Offers")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Offer created")
+            @ApiResponse(responseCode = "201", description = "Offers created")
     })
-    @PostMapping(path = "/{ownerId}")
+    @PostMapping(path = {"/{ownerId}"})
     public ResponseEntity<Collection<OfferDto>> createOffers(@RequestHeader HttpHeaders headers,
             @RequestBody List<OfferDto> offers,
             @PathVariable Long ownerId) {
         logHeaders(headers);
+
         Optional<Collection<OfferDto>> maybeSaved = offerService.saveAll(offers, ownerId);
         return maybeSaved.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get())
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    @Operation(summary = "Create new Offer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Offer created")
+    })
+    @PostMapping(path = "")
+    public ResponseEntity<OfferDto> createOffer(@RequestHeader HttpHeaders headers,
+            @RequestBody OfferDto offer) {
+        logHeaders(headers);
+
+        Long ownerId = offer.owner_id();
+        Optional<Collection<OfferDto>> maybeSaved = offerService.saveAll(Arrays.asList(offer), ownerId);
+        return maybeSaved.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get().iterator().next())
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
