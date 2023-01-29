@@ -4,9 +4,13 @@ import { flatStyles } from '../styles/FlatStyles';
 import { GREENISH_BLUE} from '../styles/Colors';
 import HorizontalRule from './HorizontalRule';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useState } from 'react';
 
 function FlatScreen({ route, navigation }) {
   const {flat} = route.params;
+  console.log(flat);
+  const [loading, setLoading] = useState(true);
+  const [images, setImages] = useState([]);
   
   const getContent = () => (
     <ScrollView>

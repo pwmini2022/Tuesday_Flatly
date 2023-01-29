@@ -11,30 +11,45 @@ export const login = async (username, password) => (
             "password": password
         })
     })
-        .then(response => {
-            if (response.ok){
-                return response.json();
-            } else {
-                throw response;
-            }
-        })
-        .catch(error => {
-            console.error(JSON.stringify(error));
-        })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw response;
+        }
+    })
 )
 
 
 // GET methods
 
-export const getOffers = async (token) => (
+export const getOffers = async (token, page, itemsOnPage) => (
+    await fetch(`${BASE_URL}/logic/api/offers?page=${page}&itemsOnPage=${itemsOnPage}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw response;
+        }
+    })
+    .catch(error => {
+        console.error(JSON.stringify(error));
+    })
+)
+
+export const getNumOffers = async (token) => (
     await fetch(`${BASE_URL}/logic/api/offers`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
     .then(response => {
-        if (response.ok){
-            return response.json();
+        if (response.ok) {
+            return Object.keys(response.json()).length;
         } else {
             throw response;
         }
@@ -53,7 +68,7 @@ export const getOfferImages = async (token, offerUuid) => {
         }
     })
     .then(response => {
-        if (response.ok){
+        if (response.ok) {
             return response.json();
         } else {
             throw response;
@@ -62,8 +77,10 @@ export const getOfferImages = async (token, offerUuid) => {
     .catch(error => {
         console.error(JSON.stringify(error));
     })
+
+    console.log(imagesData);
     
-    
+    /*
     for (const imageData of imagesData) {
         console.log(imageData);
 
@@ -87,7 +104,7 @@ export const getOfferImages = async (token, offerUuid) => {
         console.log(image);
 
         images.push(image);
-    }
+    }*/
     
     return images;
 }
