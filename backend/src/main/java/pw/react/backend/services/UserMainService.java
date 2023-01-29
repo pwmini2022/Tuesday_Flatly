@@ -2,34 +2,24 @@ package pw.react.backend.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pw.react.backend.dao.UserRepository;
 import pw.react.backend.exceptions.UserValidationException;
-import pw.react.backend.models.Offer;
 import pw.react.backend.models.User;
 import pw.react.backend.web.BookingDto;
 import pw.react.backend.web.OfferDto;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public class UserMainService implements UserService {
     private static final Logger log = LoggerFactory.getLogger(UserMainService.class);
 
     private final UserRepository userRepository;
-    private IOfferService offerService;
     private PasswordEncoder passwordEncoder;
 
     public UserMainService(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setOfferService(IOfferService offerService) {
-        this.offerService = offerService;
     }
 
     @Override

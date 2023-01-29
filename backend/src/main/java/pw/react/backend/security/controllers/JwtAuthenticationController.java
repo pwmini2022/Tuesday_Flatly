@@ -7,22 +7,22 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import pw.react.backend.models.User;
 import pw.react.backend.security.models.JwtRequest;
-import pw.react.backend.security.models.JwtResponse;
 import pw.react.backend.security.services.JwtTokenService;
 import pw.react.backend.security.services.JwtUserDetailsService;
+import pw.react.backend.web.LoginResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = JwtAuthenticationController.AUTHENTICATION_PATH)
+@RequestMapping
 @Profile({"jwt"})
 public class JwtAuthenticationController {
-
-    public static final String AUTHENTICATION_PATH = "/auth";
+    public static final String AUTHENTICATION_PATH = "/auth"; // ?
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
@@ -34,17 +34,14 @@ public class JwtAuthenticationController {
         this.userDetailsService = userDetailsService;
     }
 
-    @PostMapping(path = "/login")
-    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest,
+    @PostMapping(path = {"/logic/api/auth/login", "/authenticate"})
+    public ResponseEntity<LoginResponse> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest,
                                                        HttpServletRequest request) throws Exception {
-
         authenticate(authenticationRequest.username(), authenticationRequest.password());
+        final User userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username());
+        final String tokenValue = jwtTokenService.generateToken(userDetails, request);
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username());
-
-        final String token = jwtTokenService.generateToken(userDetails, request);
-
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(LoginResponse.valueFrom(userDetails, tokenValue));
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -57,13 +54,13 @@ public class JwtAuthenticationController {
         }
     }
 
-    @PostMapping(path = "/logout")
+    @PostMapping(path = "/logic/api/auth/logout")
     public ResponseEntity<Void> invalidateToken(HttpServletRequest request) {
         boolean result = jwtTokenService.invalidateToken(request);
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/logic/api/auth")
     public ResponseEntity<Void> removeInvalidTokens() {
         jwtTokenService.removeTokens();
         return ResponseEntity.accepted().build();

@@ -2,7 +2,6 @@ package pw.react.backend.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,11 +13,14 @@ public class Booking implements Serializable {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String uuid;
 
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private String firstName;
+    private Long dateFrom;
+    private Long dateTo;
 
+    private String firstName;
     private String lastName;
+
+    private Long numberOfKids;
+    private Long numberOfAdults;
 
     @ManyToOne
     @JoinColumn(name="owner_id", nullable=false)
@@ -36,20 +38,20 @@ public class Booking implements Serializable {
         this.uuid = uuid;
     }
 
-    public LocalDateTime getStartDate() {
-        return startDate;
+    public Long getDateFrom() {
+        return dateFrom;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
+    public void setDateFrom(Long startDate) {
+        this.dateFrom = startDate;
     }
 
-    public LocalDateTime getEndDate() {
-        return endDate;
+    public Long getDateTo() {
+        return dateTo;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
+    public void setDateTo(Long endDate) {
+        this.dateTo = endDate;
     }
 
     public User getAdmin() {
@@ -84,9 +86,25 @@ public class Booking implements Serializable {
         this.lastName = lastName;
     }
 
+    public Long getNumberOfKids() {
+        return numberOfKids;
+    }
+
+    public void setNumberOfKids(Long numberOfKids) {
+        this.numberOfKids = numberOfKids;
+    }
+
+    public Long getNumberOfAdults() {
+        return numberOfAdults;
+    }
+
+    public void setNumberOfAdults(Long numberOfAdults) {
+        this.numberOfAdults = numberOfAdults;
+    }
+
     @Override
     public String toString() {
-        return "Booking [uuid=" + uuid + ", startDate=" + startDate + ", endDate=" + endDate + ", firstName="
+        return "Booking [uuid=" + uuid + ", startDate=" + dateFrom + ", endDate=" + dateTo + ", firstName="
                 + firstName + ", lastName=" + lastName + ", admin=" + admin + ", offer=" + offer + "]";
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import pw.react.backend.models.User;
 import pw.react.backend.security.models.JwtRequest;
 import pw.react.backend.security.models.JwtResponse;
-import pw.react.backend.web.CompanyDto;
+//import pw.react.backend.web.CompanyDto;
 
 import java.util.List;
 
@@ -37,14 +37,14 @@ class HttpBaseServiceTest {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + response1.getBody().jwttoken());
 
-        final ResponseEntity<List<CompanyDto>> response3 = restTemplate.exchange(
-                url + "/companies",
-                HttpMethod.GET,
-                new HttpEntity<>(new User(), headers),
-                new ParameterizedTypeReference<>() {}
-        );
+        // final ResponseEntity<List<CompanyDto>> response3 = restTemplate.exchange(
+        //         url + "/companies",
+        //         HttpMethod.GET,
+        //         new HttpEntity<>(new User(), headers),
+        //         new ParameterizedTypeReference<>() {}
+        // );
 
-        assertEquals(1, response3.getBody().size());
+        //assertEquals(1, response3.getBody().size());
 
     }
 }

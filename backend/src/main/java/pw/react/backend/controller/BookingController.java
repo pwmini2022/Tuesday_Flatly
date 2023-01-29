@@ -20,18 +20,20 @@ import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-import pw.react.backend.models.Offer;
+import java.util.ArrayList;
+
 import pw.react.backend.models.Booking;
 import pw.react.backend.services.IBookingService;
 import pw.react.backend.services.IOfferService;
 import pw.react.backend.services.UserService;
+import pw.react.backend.utils.MySimpleUtils;
 import pw.react.backend.web.BookingDto;
 import pw.react.backend.dao.BookingRepository;
 
 @RestController
 @RequestMapping(path = BookingController.BOOKINGS_PATH)
 public class BookingController {
-    public static final String BOOKINGS_PATH = "/bookings";
+    public static final String BOOKINGS_PATH = "/logic/api/bookings";
     private static final Logger log = LoggerFactory.getLogger(BookingController.class);
 
     private final BookingRepository repository;
@@ -60,29 +62,63 @@ public class BookingController {
             @ApiResponse(responseCode = "200", description = "Bookings for specific offer sent, OK"),
             @ApiResponse(responseCode = "400", description = "Offer doesn't exist")
     })
-    @GetMapping(path = "")
-    public ResponseEntity<Collection<BookingDto>> getAllBookings(@RequestHeader HttpHeaders headers,
-            @RequestParam(required = false) Long offerId,
-            @RequestParam(required = false) Long ownerId) {
+    @GetMapping(path = {"", "/{bookingUuid}"})
+    public ResponseEntity<Collection<BookingDto>> getBookings(@RequestHeader HttpHeaders headers,
+            @PathVariable(required = false) String bookingUuid,
+            @RequestParam(required = false) String offerUuid,
+            @RequestParam(required = false) Long ownerId,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer itemsOnPage) {
         logHeaders(headers);
-        if (offerId != null) { // bookings by offer
-            Optional<Collection<BookingDto>> maybeSpecificBookings = offerService.getAllBookings(offerId);
+
+        List<BookingDto> bookingDtos = null;
+
+        if (bookingUuid != null) { // speicific booking
+            Optional<Booking> maybeBooking = repository.findById(bookingUuid);
+
+            if (maybeBooking.isPresent()) {
+                bookingDtos = new ArrayList<>();
+                bookingDtos.add(BookingDto.valueFrom(maybeBooking.get()));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        } else if (offerUuid != null) { // bookings by offer
+            Optional<Collection<BookingDto>> maybeSpecificBookings = offerService.getAllBookings(offerUuid);
             if (maybeSpecificBookings.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(maybeSpecificBookings.get());
+                bookingDtos = new ArrayList<>(maybeSpecificBookings.get());
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
         } else if (ownerId != null) { // bookings by user
             Optional<Collection<BookingDto>> maybeSpecificBookings = userService.getAllBookings(ownerId);
             if (maybeSpecificBookings.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(maybeSpecificBookings.get());
+                bookingDtos = new ArrayList<>(maybeSpecificBookings.get());
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
         } else { // all bookings
-            return ResponseEntity.ok(repository.findAll().stream().map(BookingDto::valueFrom)
-                    .collect(toList()));
+            bookingDtos = repository.findAll().stream().map(BookingDto::valueFrom)
+                    .collect(toList());
         }
+
+        // again, not redundant b/c paging
+        if (bookingDtos.isEmpty()) {
+            ResponseEntity.ok(bookingDtos);
+        }
+
+        if (page != null && itemsOnPage == null || page == null && itemsOnPage != null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        if (page != null && itemsOnPage != null) {
+            bookingDtos = MySimpleUtils.getPage(bookingDtos, page, itemsOnPage);
+
+            if (bookingDtos.isEmpty()) {
+                return ResponseEntity.badRequest().body(null);
+            }
+        }
+
+        return ResponseEntity.ok(bookingDtos);
     }
 
     @Operation(summary = "Create new booking")
@@ -90,24 +126,15 @@ public class BookingController {
             @ApiResponse(responseCode = "201", description = "Booking created"),
             @ApiResponse(responseCode = "400", description = "Admin doesn't exist")
     })
-    @PostMapping(path = "")
+    @PostMapping(path = "/{offerUuid}")
     public ResponseEntity<Collection<BookingDto>> createBookings(@RequestHeader HttpHeaders headers,
             @RequestBody List<BookingDto> bookings,
-            @RequestParam Long offerId) {
+            @PathVariable String offerUuid) {
         logHeaders(headers);
-        Optional<Offer> maybeOffer = offerService.findById(offerId);
-        if (maybeOffer.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
 
-        List<Booking> createdBookings = bookings.stream()
-                .map((BookingDto dto) -> BookingDto.convertToBooking(dto, maybeOffer.get()))
-                .toList();
-        List<BookingDto> result = repository.saveAll(createdBookings)
-                .stream()
-                .map(BookingDto::valueFrom)
-                .toList();
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        Optional<Collection<BookingDto>> maybeSaved = bookingService.saveAll(bookings, offerUuid);
+        return maybeSaved.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get())
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @Operation(summary = "Update a booking")
@@ -115,9 +142,9 @@ public class BookingController {
             @ApiResponse(responseCode = "200", description = "Booking [UUID: ...] updated"),
             @ApiResponse(responseCode = "400", description = "Booking [UUID: ...] does not exist")
     })
-    @PutMapping(path = "")
+    @PutMapping(path = "/{bookingUuid}")
     public ResponseEntity<String> updateBooking(@RequestHeader HttpHeaders headers,
-            @RequestParam String bookingUuid,
+            @PathVariable String bookingUuid,
             @Valid @RequestBody BookingDto updatedBooking) {
         Booking booking = BookingDto.convertToBooking(updatedBooking);
         booking.setUuid(bookingUuid);
@@ -132,9 +159,9 @@ public class BookingController {
             @ApiResponse(responseCode = "200", description = "Booking [UUID: ...] deleted"),
             @ApiResponse(responseCode = "400", description = "Booking [UUID: ...] does not exist")
     })
-    @DeleteMapping(path = "")
+    @DeleteMapping(path = "/{bookingUuid}")
     public ResponseEntity<String> deleteBooking(@RequestHeader HttpHeaders headers,
-            @RequestParam String bookingUuid) {
+            @PathVariable String bookingUuid) {
         logHeaders(headers);
         boolean deleted = bookingService.deleteBooking(bookingUuid);
 
