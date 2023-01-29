@@ -5,12 +5,17 @@ export const user = atom({
   default: null,
 });
 
-export const getUsername = selector({
-  key: 'getUsername',
+export const getUserName = selector({
+  key: 'getUserName',
   get: ({get}) => get(user).username
 });
 
-export const getEmail = selector({
-  key: 'getEmail',
+export const getUserEmail = selector({
+  key: 'getUserEmail',
   get: ({get}) => get(user).email
+});
+
+export const getUserToken = selector({
+  key: 'getUserToken',
+  get: ({get}) => get(user).token
 });
