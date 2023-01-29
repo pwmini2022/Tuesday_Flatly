@@ -56,16 +56,6 @@ public class MainConfig {
     }
 
     @Bean
-    public CompanyService companyMainService(CompanyRepository companyRepository) {
-        return new CompanyMainService(companyRepository);
-    }
-
-    @Bean
-    public LogoService logoService(CompanyLogoRepository companyLogoRepository) {
-        return new CompanyLogoService(companyLogoRepository);
-    }
-
-    @Bean
     public IBookingService bookingService(BookingRepository bookingRepository) {
         return new BookingService(bookingRepository);
     }
