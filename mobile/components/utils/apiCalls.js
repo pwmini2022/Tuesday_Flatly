@@ -1,4 +1,5 @@
-const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io';
+const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io'
+const JWT = 'YOUR_TOKEN'
 
 // Login
 
@@ -11,13 +12,16 @@ export const login = async (username, password) => (
             "password": password
         })
     })
-    .then(response => {
-        if (response.ok){
-            return response.json();
-        } else {
-            throw response;
-        }
-    })
+        .then(response => {
+            if (response.ok){
+                return response.json();
+            } else {
+                throw response;
+            }
+        })
+        .catch(error => {
+            console.error(JSON.stringify(error));
+        })
 )
 
 

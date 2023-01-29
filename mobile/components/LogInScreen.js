@@ -7,7 +7,7 @@ import Button from './Button';
 import FloatingScreen from './FloatingScreen';
 import { useRecoilState } from 'recoil';
 import { user } from '../recoil/recoil';
-import { login } from './utils/apiCalls';
+import { login, OK } from './utils/apiCalls';
 
 function LogInScreen({ navigation }) {
   const [username, setUsername] = useState("");

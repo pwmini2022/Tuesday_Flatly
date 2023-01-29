@@ -16,10 +16,10 @@ import pw.react.backend.services.UserService;
 import pw.react.backend.web.UserDto;
 
 @RestController
-@RequestMapping(path = "/users")
+@RequestMapping(path = UserController.USERS_PATH)
 @Profile({"!jwt"})
 public class UserController {
-
+    public static final String USERS_PATH = "/logic/api/users";
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;

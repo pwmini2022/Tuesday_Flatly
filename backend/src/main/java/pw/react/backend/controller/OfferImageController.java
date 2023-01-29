@@ -28,7 +28,7 @@ import pw.react.backend.web.OfferImageInfo;
 @RestController
 @RequestMapping(path = OfferImageController.OFFER_IMAGES_PATH)
 public class OfferImageController {
-    public static final String OFFER_IMAGES_PATH = "/offerImages";
+    public static final String OFFER_IMAGES_PATH = "/logic/api/offerImages";
     private static final Logger log = LoggerFactory.getLogger(OfferImageController.class);
 
     private final OfferImageRepository offerImageRepository;
@@ -45,13 +45,13 @@ public class OfferImageController {
         this.offerImageService = offerImageService;
     }
 
-    @PostMapping("/{offerId}")
+    @PostMapping("/{offerUuid}")
     public ResponseEntity<OfferImageInfo> uploadOfferImage(@RequestHeader HttpHeaders headers,
-            @PathVariable Long offerId,
+            @PathVariable String offerUuid,
             @RequestParam("file") MultipartFile file) {
         logHeaders(headers);
 
-        Optional<OfferImage> maybeOfferImage = offerImageService.storeOfferImage(offerId, file);
+        Optional<OfferImage> maybeOfferImage = offerImageService.storeOfferImage(offerUuid, file);
         return maybeOfferImage.isPresent()
                 ? ResponseEntity.status(HttpStatus.CREATED).body(OfferImageInfo.valueFrom(maybeOfferImage.get()))
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -73,11 +73,11 @@ public class OfferImageController {
 
     @GetMapping("")
     public ResponseEntity<Collection<OfferImageInfo>> getOfferImagesInfo(@RequestHeader HttpHeaders headers,
-            @RequestParam(required = false) Long offerId) {
+            @RequestParam(required = false) String offerUuid) {
         logHeaders(headers);
 
-        if (offerId != null) {
-            Optional<Offer> maybeOffer = offerService.findById(offerId);
+        if (offerUuid != null) {
+            Optional<Offer> maybeOffer = offerService.findById(offerUuid);
             return maybeOffer.isPresent()
                     ? ResponseEntity.ok(maybeOffer.get().getImages().stream().map(OfferImageInfo::valueFrom)
                             .collect(toList()))

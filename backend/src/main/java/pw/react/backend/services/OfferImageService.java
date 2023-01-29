@@ -29,8 +29,8 @@ public class OfferImageService implements IOfferImageService {
     }
 
     @Override
-    public Optional<OfferImage> storeOfferImage(Long offerId, MultipartFile file) {
-        Optional<Offer> maybeOffer = offerService.findById(offerId);
+    public Optional<OfferImage> storeOfferImage(String offerUuid, MultipartFile file) {
+        Optional<Offer> maybeOffer = offerService.findById(offerUuid);
         if (maybeOffer.isEmpty()) {
             return Optional.empty();
         }
