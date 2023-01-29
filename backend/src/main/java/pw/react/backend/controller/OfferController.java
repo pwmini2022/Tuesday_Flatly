@@ -203,10 +203,10 @@ public class OfferController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Offer created")
     })
-    @PostMapping(path = "")
+    @PostMapping(path = "/{ownerId}")
     public ResponseEntity<Collection<OfferDto>> createOffers(@RequestHeader HttpHeaders headers,
             @RequestBody List<OfferDto> offers,
-            @RequestParam Long ownerId) {
+            @PathVariable Long ownerId) {
         logHeaders(headers);
         Optional<Collection<OfferDto>> maybeSaved = offerService.saveAll(offers, ownerId);
         return maybeSaved.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get())
