@@ -60,7 +60,7 @@ public class JwtAuthenticationController {
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("auth")
+    @DeleteMapping("/logic/api/auth")
     public ResponseEntity<Void> removeInvalidTokens() {
         jwtTokenService.removeTokens();
         return ResponseEntity.accepted().build();

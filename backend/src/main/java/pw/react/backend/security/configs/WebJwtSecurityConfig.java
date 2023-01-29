@@ -63,12 +63,13 @@ public class WebJwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/logic/api/auth/login").permitAll()
+                .antMatchers("/authenticate").permitAll()
                 .antMatchers(HttpMethod.POST, "/logic/api/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .antMatchers( "/v3/api-docs/**", "/swagger-ui/**").permitAll()
 
                 // all other requests need to be authenticated
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated()
                 ;
 
         // Add a filter to validate the tokens with every request
