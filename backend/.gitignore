@@ -35,3 +35,6 @@ mvnw.cmd
 
 # thing I'm just keeping for reference:
 *.pdf
+
+# ??
+.fuse*
