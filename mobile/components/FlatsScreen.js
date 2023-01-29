@@ -2,7 +2,6 @@ import { View, Text, Image, TouchableHighlight } from 'react-native';
 import { listStyles } from '../styles/ListStyles';
 import { useState, useEffect } from 'react';
 
-import FLATS from "../data/flats.json"
 import HorizontalRule from './HorizontalRule';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import HomeScreen from './HomeScreen';
@@ -14,9 +13,9 @@ function FlatsScreen({ navigation }) {
   const iconSize = 30;
   const iconColor = '#383838';
   const maxFlats = 3;
-  const maxPages = Math.ceil(FLATS.length / maxFlats);
   const [page, setPage] = useState(0);
   const token = useRecoilValue(getUserToken);
+  const [maxPages, setMaxPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [flats, setFlats] = useState([]);
 
@@ -26,11 +25,11 @@ function FlatsScreen({ navigation }) {
         <TouchableHighlight onPress={() => navigation.navigate('FlatScreen', {flat: flat})}>
           <Image
             style={listStyles.image}
-            source={getOfferImages(token, flat.uuid)[0]}
+            source="sss"
           />
         </TouchableHighlight>
         <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
-          <Text style={[listStyles.details, {fontWeight: 'bold', fontSize: 16}]}>
+          <Text style={[listStyles.details, {fontFamily: 'SourceSansPro-Bold', fontSize: 16}]}>
             {flat.name}
           </Text>
           <Text style={listStyles.details}>
@@ -54,7 +53,9 @@ function FlatsScreen({ navigation }) {
 
   async function getFlats() {
     setLoading(true);
-    setFlats(await getOffers(token))
+    const flats = await getOffers(token);
+    setFlats(flats);
+    setMaxPages(Math.ceil(flats.length / maxFlats));
     setLoading(false);
   }
 

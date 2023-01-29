@@ -11,19 +11,16 @@ export const logInStyles = StyleSheet.create({
   title: {
     fontSize: 50,
     textAlign: 'center',
-    fontFamily: 'Rubik-Regular',
-    fontWeight: 'bold',
+    fontFamily: 'Rubik-Medium',
     color: DARK_BLUE
   },
   subtitle: {
     fontSize: 20,
     textAlign: 'center',
-    fontFamily: 'SourceSansPro-Regular',
-    fontStyle: 'italic'
+    fontFamily: 'SourceSansPro-Italic'
   },
   credentials: {
     fontSize: 18,
-    fontFamily: 'SourceSansPro-Regular',
     textAlign: 'center',
     fontWeight: 'bold',
     marginBottom: 15
@@ -45,10 +42,9 @@ export const logInStyles = StyleSheet.create({
   },
   forgotPassword: {
     textAlign: 'center',
-    fontFamily: 'SourceSansPro-Regular',
-    fontSize: 16,
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 17,
     color: PURPLE,
-    fontWeight: 'bold',
     textDecorationLine: 'underline'
   },
   info: {

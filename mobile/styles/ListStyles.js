@@ -8,9 +8,8 @@ export const listStyles = StyleSheet.create({
     marginTop: 20
   },
   header: {
-    fontFamily: 'SourceSansPro-Regular',
+    fontFamily: 'SourceSansPro-Bold',
     fontSize: 19,
-    fontWeight: 'bold',
     color: PURPLE
   },
   listWrap: {
@@ -39,8 +38,7 @@ export const listStyles = StyleSheet.create({
     flexDirection: 'row'
   },
   pages: {
-    fontFamily: 'SourceSansPro-Regular',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 16
   }
 });

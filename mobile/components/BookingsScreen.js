@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableHighlight } from 'react-native';
 import { listStyles } from '../styles/ListStyles';
 import { useState } from 'react';
 
@@ -6,6 +6,8 @@ import BOOKINGS from "../data/bookings.json"
 import HorizontalRule from './HorizontalRule';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import HomeScreen from './HomeScreen';
+import FLATS from "../data/flats.json"
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function BookingsScreen({ navigation }) {
   const iconSize = 30;
@@ -13,18 +15,21 @@ function BookingsScreen({ navigation }) {
   const maxBookings = 3;
   const maxPages = Math.ceil(BOOKINGS.length / maxBookings);
   const [page, setPage] = useState(0);
+  const user = {firstName: 'Myname', lastName: 'Mylastname'}
 
   const getBookingView = (booking) => (
     <View key={booking.id}>
       <View style={listStyles.itemWrap}>
-        <Image
-          style={listStyles.image}
-          source={{
-            uri: 'asdas',
-          }}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate('BookingScreen', {booking, booking, flat: FLATS[booking.flat-1], user: user})}>
+          <Image
+            style={listStyles.image}
+            source={{
+              uri: FLATS[booking.flat-1].picture1,
+            }}
+          />
+        </TouchableOpacity>
         <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
-          <Text style={[listStyles.details, {fontWeight: 'bold', fontSize: 16}]}>
+          <Text style={[listStyles.details, {fontFamily: 'SourceSansPro-Bold', fontSize: 16}]}>
             Booking {booking.id}
           </Text>
           <Text style={listStyles.details}>

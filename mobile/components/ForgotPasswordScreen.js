@@ -5,7 +5,7 @@ import { GREENISH_BLUE, TURQUOISE } from '../styles/Colors';
 import FloatingScreen from './FloatingScreen';
 import Button from './Button';
 
-function ForgotPasswordScreen({ navigation }) {
+function ForgotPasswordScreen() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 	const [borderColorUsername, setBorderColorUsername] = useState("lightgray");
