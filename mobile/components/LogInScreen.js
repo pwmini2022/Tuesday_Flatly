@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, TextInput, Keyboard, TouchableOpacity } from 'react-native';
+import { Text, TextInput, Keyboard, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { GREENISH_BLUE, TURQUOISE } from '../styles/Colors';
 import { logInStyles } from '../styles/LogInStyles';
@@ -15,25 +15,31 @@ function LogInScreen({ navigation }) {
 	const [borderColorUsername, setBorderColorUsername] = useState("lightgray");
 	const [borderColorPassword, setBorderColorPassword] = useState("lightgray");
 	const setLoggedInUser = useRecoilState(user)[1];
+	const [loading, setLoading] = useState(false);
 
 	async function checkCredentials() {
+		setLoading(true);
 		Keyboard.dismiss();
 
 		try {
 			const response = await login(username, password);
-			console.log(response);
-			const user = {
+			setLoggedInUser({
+				id: response.id,
 				username: username,
-				password: password,
+				email: response.email,
 				token: response.jwttoken
-			}
-			setLoggedInUser(user);
-			navigation.navigate('FlatsScreen');
+			});
+			setUsername("");
+			setPassword("");
+			setBorderColorUsername("lightgray");
+			setBorderColorPassword("lightgray");
+			navigation.navigate('ProfileScreen');
 		}
 		catch {
 			setBorderColorUsername('red');
 			setBorderColorPassword('red');
 		}
+		setLoading(false);
 	}
 
 	function onFocusUsername() {
@@ -57,7 +63,7 @@ function LogInScreen({ navigation }) {
 			<TextInput
 				onChangeText={setUsername}
 				value={username}
-				placeholder="Username / Email"
+				placeholder="Username"
 				onFocus={onFocusUsername}
 				style={[logInStyles.field, {borderBottomColor: borderColorUsername}]}
 			/>
@@ -70,7 +76,7 @@ function LogInScreen({ navigation }) {
 				style={[logInStyles.field, {borderBottomColor: borderColorPassword}]}
 			/>
 		</ScrollView>
-		<Button text="LOG IN" onPress={checkCredentials} color={GREENISH_BLUE}/>
+		<Button loading={loading} text="LOG IN" color={GREENISH_BLUE} onPress={checkCredentials}/>
 		<TouchableOpacity onPress={toForgotPasswordScreen} style={{marginTop: 15}}>
 			<Text style={logInStyles.forgotPassword}>Forgot your password?</Text>
 		</TouchableOpacity>

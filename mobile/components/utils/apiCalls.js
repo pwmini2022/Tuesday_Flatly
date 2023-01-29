@@ -1,12 +1,9 @@
 const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io';
 
-// POST to /auth/login (username: "bruh1", "bruh2" or "bruh3", password: "moment") and get keep the token somewhere
-// then send the token in the Authorization header as "Bearer ..."
-
 // Login
 
 export const login = async (username, password) => (
-    await fetch(`${BASE_URL}/auth/login`, {
+    await fetch(`${BASE_URL}/logic/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -23,19 +20,58 @@ export const login = async (username, password) => (
     })
 )
 
+
 // GET methods
 
-export const getOffers = async (token, ownerId) => {
-    console.log(token);
-    console.log(ownerId);
-    
-    return await fetch(`${BASE_URL}/offers?${ownerId ? `ownerId=${ownerId}` : ""}`, {
+export const getOffers = async (token) => (
+    await fetch(`${BASE_URL}/logic/api/offers`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
+    .then(response => {
+        if (response.ok){
+            return response.json();
+        } else {
+            throw response;
+        }
+    })
+    .catch(error => {
+        console.error(JSON.stringify(error));
+    })
+)
+
+export const getOfferImages = async (token, offerUuid) => {
+    const images = [];
+
+    const imagesData = await fetch(`${BASE_URL}/logic/api/offerImages?offerUuid=${offerUuid}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (response.ok){
+            return response.json();
+        } else {
+            throw response;
+        }
+    })
+    .catch(error => {
+        console.error(JSON.stringify(error));
+    })
+    
+    
+    for (const imageData of imagesData) {
+        console.log(imageData);
+
+        const image = await fetch(`${BASE_URL}/logic/api/offerImages/${imageData.offerImageUuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
+                console.log(response);
                 return response.json();
             } else {
                 throw response;
@@ -44,7 +80,18 @@ export const getOffers = async (token, ownerId) => {
         .catch(error => {
             console.error(JSON.stringify(error));
         })
+
+        console.log(image);
+
+        images.push(image);
+    }
+    
+    return images;
 }
+
+/////////////////////////////////////////
+/* DOWN FROM HERE WE HAVE TO CHANGE!!! */
+/////////////////////////////////////////
 
 export const getBookings = async (ownerId, offerId) => {
     return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`)

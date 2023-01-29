@@ -1,7 +1,7 @@
 import { View, Text, TextInput, ScrollView, Keyboard } from 'react-native';
 import { useRecoilValue } from 'recoil';
 import HomeScreen from "./HomeScreen";
-import { getUsername, getEmail } from '../recoil/recoil';
+import { getUserName, getUserEmail } from '../recoil/recoil';
 import { profileStyles } from '../styles/ProfileStyles';
 import { logInStyles } from '../styles/LogInStyles';
 import Button from './Button';
@@ -9,8 +9,8 @@ import { useState } from 'react';
 import { GREENISH_BLUE, TURQUOISE } from '../styles/Colors';
 
 function ProfileScreen({ navigation }) {
-  const username = useRecoilValue(getUsername);
-  const email = useRecoilValue(getEmail);
+  const username = useRecoilValue(getUserName);
+  const email = useRecoilValue(getUserEmail);
   const [changePassword, setChangePassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [repeatNewPassword, setRepeatNewPassword] = useState("");

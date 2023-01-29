@@ -6,8 +6,8 @@ import FLATS from "../data/flats.json"
 import HorizontalRule from './HorizontalRule';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import HomeScreen from './HomeScreen';
-import { getOffers } from './utils/apiCalls';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { getOfferImages, getOffers } from './utils/apiCalls';
+import { useRecoilValue } from 'recoil';
 import { getUserToken } from '../recoil/recoil';
 
 function FlatsScreen({ navigation }) {
@@ -21,14 +21,12 @@ function FlatsScreen({ navigation }) {
   const [flats, setFlats] = useState([]);
 
   const getFlatView = (flat) => (
-    <View key={flat.id}>
+    <View key={flat.uuid}>
       <View style={listStyles.itemWrap}>
         <TouchableHighlight onPress={() => navigation.navigate('FlatScreen', {flat: flat})}>
           <Image
             style={listStyles.image}
-            source={{
-              uri: flat.picture1,
-            }}
+            source={getOfferImages(token, flat.uuid)[0]}
           />
         </TouchableHighlight>
         <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
@@ -57,7 +55,7 @@ function FlatsScreen({ navigation }) {
   async function getFlats() {
     setLoading(true);
     setFlats(await getOffers(token))
-    setLoading(false);;
+    setLoading(false);
   }
 
   useEffect(() => {
