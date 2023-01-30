@@ -68,7 +68,7 @@ function FlatScreen({ route, navigation }) {
             <Text style={flatStyles.fieldTitle}>Location:</Text> {flat.location}
           </Text>
           <Text style={flatStyles.field}>
-            <Text style={flatStyles.fieldTitle}>Price:</Text> {flat.pricePerNight} PLN / night
+            <Text style={flatStyles.fieldTitle}>Price:</Text> {flat.price} PLN / night
           </Text>
           <Text style={[flatStyles.field, {textAlign: 'justify'}]}>
             <Text style={flatStyles.fieldTitle}>Description:</Text> {flat.description}
