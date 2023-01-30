@@ -4,26 +4,29 @@ import FlatItem from './FlatItem';
 import SortBy from '../Buttons/SortByBtn';
 import SearchParam from '../Buttons/SearchParam';
 import NumOfItems from '../Buttons/NumOfItems';
-import { currParam, token, sortBy } from '../utils/Atoms';
+import { currParam, token, sortBy, numOfItems } from '../utils/Atoms';
 
 import { getOffers } from '../utils/apiCalls';
  
 import '../styles.css';
 
 function FlatScreen() {
-    const [index, setIndex] = useState(0);
+    const [index, setIndex] = useState(1);
     const [flats, setFlats] = useState([]);
     const [jwt] = useRecoilState(token);
     const [sort] = useRecoilState(sortBy);
+    const [itemsPage] = useRecoilState(numOfItems);
     const [selectedParam] = useRecoilState(currParam);
     const [params, setParams] = useState("");
+    const [err, setErr] = useState(false);
 
     useEffect(() => {
-        getOffers(jwt, selectedParam, params, sort).then(_flats => {
+        getOffers(jwt, selectedParam, params, sort, index, itemsPage).then(_flats => {
             setFlats(_flats);
         }).catch(err => {
             console.error(JSON.stringify(err));
             setFlats([]);
+            setErr(true)
         })
     }, []);
 
@@ -39,12 +42,16 @@ function FlatScreen() {
                     <SearchParam/>
                     <input type="text" className='searchBox' onChange={e => {setParams(e.target.value)}}></input>
                     <input type="button" value="Search" className='search-btn' onClick={() => {
-                        getOffers(jwt, selectedParam, params).then(_flats => {
+                        getOffers(jwt, selectedParam, params, sort, index, itemsPage).then(_flats => {
                             setFlats(_flats);
                         });
                     }}/>
                     <div className='sortBy'>
-                        <SortBy/>
+                        <SortBy onClick={() => {
+                            getOffers(jwt, selectedParam, params, sort, index, itemsPage).then(_flats => {
+                                setFlats(_flats);
+                            });
+                        }}/>
                         <NumOfItems id="itemsPage"/>
                     </div>
                 </div>
@@ -56,8 +63,18 @@ function FlatScreen() {
                 })}
             </div>
             <div className='pageBtn'>
-                <input type="button" value="<" onClick={() => setIndex(index-1)}/>
-                <input type="button" value=">" onClick={() => setIndex(index+1)}/>
+                <input type="button" value="<" onClick={() => {
+                    setIndex(index-1);
+                    getOffers(jwt, selectedParam, params, sort, index, itemsPage).then(_flats => {
+                        setFlats(_flats);
+                    });
+                }} disabled={index === 1}/>
+                <input type="button" value=">" onClick={() => {
+                    setIndex(index+1);
+                    getOffers(jwt, selectedParam, params, sort, index, itemsPage).then(_flats => {
+                        setFlats(_flats);
+                    });
+                }} disabled={err}/>
             </div>
         </div>
     )

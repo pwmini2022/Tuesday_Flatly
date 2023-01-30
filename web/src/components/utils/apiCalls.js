@@ -1,20 +1,23 @@
 const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io';
 
-const convertToQuery = (selectedParam, param) => {
+const convertToQuery = (selectedParam, param, sort, page, itemsPerPage) => {
     let query = "";
-
-    if (!selectedParam || !param)
-        return query;
 
     if (selectedParam == "dateFrom" || selectedParam == "dateTo" || selectedParam == "numberOfAdults"
         || selectedParam == "numberOfAdults") {
         if (!isNaN(parseInt(param)))
-            query = `?${selectedParam}=${parseInt(param)}`;
+            query = `&${selectedParam}=${parseInt(param)}`;
     } else if (selectedParam == "uuid") {
-        query = `${param}`;
+        query = `/${param}`;
     } else {
-        query = `?${selectedParam}=${param}`;
+        query = `&${selectedParam}=${param}`;
     }
+
+    if (sort) {
+        query += selectedParam ? '&' : '?' + `sortBy=${sort}`;
+    }
+
+    query += (selectedParam || sort ? '&' : '?') + `page=${page}&temsOnPage=${itemsPerPage}`; 
 
     return query;
 }
@@ -57,9 +60,9 @@ export const signup = async (userCredentials) => (
 
 // GET methods
 
-export const getOffers = async (token, selectedParam, queryParams, sort) => {
-    const params = convertToQuery(selectedParam, queryParams);
-    return await fetch(`${BASE_URL}/logic/api/offers/${params}?${sort ? `sortBy=${sort}` : ''}`, {
+export const getOffers = async (token, selectedParam, queryParams, sort, page, itemsPerPage) => {
+    const params = convertToQuery(selectedParam, queryParams, sort, page, itemsPerPage);
+    return await fetch(`${BASE_URL}/logic/api/offers${params}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
