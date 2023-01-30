@@ -153,7 +153,7 @@ export const getBookings = async (token, bookingId, ownerId) => {
 // POST methods
 
 export const postOffer = async (token, ownerId, offers) => {
-    return await fetch(`${BASE_URL}/logic/api/offers?ownerId=${ownerId}`, {
+    return await fetch(`${BASE_URL}/logic/api/offers/${ownerId}`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
