@@ -137,13 +137,13 @@ public class OfferController {
 
         if (location != null) {
             offerDtoStream = offerDtoStream.filter((OfferDto dto) -> {
-                return dto.location().contains(location);
+                return dto.location().toLowerCase().contains(location.toLowerCase());
             });
         }
 
         if (name != null) {
             offerDtoStream = offerDtoStream.filter((OfferDto dto) -> {
-                return dto.location().contains(name);
+                return dto.name().toLowerCase().contains(name.toLowerCase());
             });
         }
 
