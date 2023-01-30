@@ -126,7 +126,7 @@ export const getOfferImages = async (token, offerUuid) => {
 /////////////////////////////////////////
 
 export const getBookings = async (token, ownerId, offerId) => {
-    return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`, {
+    return await fetch(`${BASE_URL}/logic/api/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -146,7 +146,7 @@ export const getBookings = async (token, ownerId, offerId) => {
 // POST methods
 
 export const postOffer = async (token, ownerId, offers) => {
-    return await fetch(`${BASE_URL}/offers/${ownerId}`, {
+    return await fetch(`${BASE_URL}/logic/api/offers/${ownerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(offers),
@@ -165,7 +165,7 @@ export const postOffer = async (token, ownerId, offers) => {
 }
 
 export const postBooking = async (token, offerId, bookings) => {
-    return await fetch(`${BASE_URL}/bookings/${offerId}`, {
+    return await fetch(`${BASE_URL}/logic/api/bookings/${offerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookings),
@@ -186,7 +186,6 @@ export const postBooking = async (token, offerId, bookings) => {
 // PUT methods
 
 export const putOffer = async (token, offerId, offer) => {
-    offerUuid
     return await fetch(`${BASE_URL}/logic/api/offers/${offerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -205,8 +204,8 @@ export const putOffer = async (token, offerId, offer) => {
         })
 }
 
-export const putBooking = async (bookingId, booking) => {
-    await fetch(`${BASE_URL}/bookings/${bookingId}`, {
+export const putBooking = async (token, bookingId, booking) => {
+    await fetch(`${BASE_URL}/logic/api/bookings/${bookingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(booking),
@@ -226,8 +225,8 @@ export const putBooking = async (bookingId, booking) => {
 
 // DELETE methods
 
-export const deleteOffer = async (offerId) => {
-    await fetch(`${BASE_URL}/offers/${offerId}`, {
+export const deleteOffer = async (token, offerId) => {
+    await fetch(`${BASE_URL}/logic/api/offers/${offerId}`, {
         method: 'DELETE',
         Authorization: `Bearer ${token}`
     })
@@ -243,8 +242,8 @@ export const deleteOffer = async (offerId) => {
         })
 }
 
-export const deleteBooking = async (bookingId) => {
-    await fetch(`${BASE_URL}/bookings/${bookingId}`, {
+export const deleteBooking = async (token, bookingId) => {
+    await fetch(`${BASE_URL}/logic/api/bookings/${bookingId}`, {
         method: 'DELETE',
         Authorization: `Bearer ${token}`
     })
