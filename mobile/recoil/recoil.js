@@ -5,6 +5,11 @@ export const user = atom({
   default: null,
 });
 
+export const bookingDeleted = atom({
+  key: 'bookingDeleted',
+  default: false,
+});
+
 export const getUserName = selector({
   key: 'getUserName',
   get: ({get}) => get(user).username

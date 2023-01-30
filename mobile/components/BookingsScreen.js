@@ -1,86 +1,91 @@
 import { View, Text, Image, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { listStyles } from '../styles/ListStyles';
 import { useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getBookings, getOffer } from './utils/apiCalls';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { getUserToken } from '../recoil/recoil';
+import { INDEPENDENCE, TURQUOISE } from '../styles/Colors';
+import { bookingDeleted } from '../recoil/recoil';
 
-import BOOKINGS from "../data/bookings.json"
 import HorizontalRule from './HorizontalRule';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome5';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import HomeScreen from './HomeScreen';
-import FLATS from "../data/flats.json"
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { getNumBookings, getBookings } from './utils/apiCalls';
-import { useRecoilValue } from 'recoil';
-import { getUserToken } from '../recoil/recoil';
-import { TURQUOISE } from '../styles/Colors';
+
 
 function BookingsScreen({ navigation }) {
   const iconSize = 30;
   const iconColor = '#383838';
-  const maxBookings = 3;
+  const maxBookings = 4;
   const [page, setPage] = useState(0);
-  const user = {firstName: 'Myname', lastName: 'Mylastname'}
   const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
+  const [flats, setFlats] = useState({});
+  const [deleted, setDeleted] = useRecoilState(bookingDeleted);
   const token = useRecoilValue(getUserToken);
-  const [maxPages, setMaxPages] = useState(1);
-
-  const getBookingView = (booking) => (
-    <View key={booking.uuid}>
-      <View style={listStyles.itemWrap}>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('BookingScreen', {booking, booking, flat: FLATS[booking.flat-1], user: user})}> */}
-          <Image
-            style={listStyles.image}
-            source={{
-              uri: "aa"//FLATS[booking.flat-1].picture1,
-            }}
-          />
-        {/*</TouchableOpacity>*/}
-        <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
-          <Text style={[listStyles.details, {fontFamily: 'SourceSansPro-Bold', fontSize: 16}]}>
-            Booking {booking.id}
-          </Text>
-          <Text style={listStyles.details}>
-            <Text style={{fontWeight: 'bold'}}>Flat:</Text> {booking.flat}
-          </Text>
-          <Text style={listStyles.details}>
-            <Text style={{fontWeight: 'bold'}}>Dates:</Text> from {booking.startDate} till {booking.endDate}
-          </Text>
-        </View>
-      </View>
-      <HorizontalRule color={'#606060'} width={2}/>
-    </View>
-  )
+  const maxPages = 50;
 
   async function updateBookings() {
     setLoading(true);
 
-    const bookingsDetails = await getBookings(token, page+1, maxBookings);
-    setBookings(bookingsDetails);
-    console.log(bookings);
-    
-    /*
-    let urls = {}
-    for (const flat of flats) {
-      const images = await getOfferImages(token, flat.uuid);
-      if (images.length) {
-        urls[flat.uuid] = await getOfferImageBase64(token, images[0].offerImageUuid)
-      }
+    try {
+      const bookingsDetails = await getBookings(token, page+1, maxBookings);
+      setBookings(bookingsDetails);
     }
-    setUris(urls);
-    */
-    
-    const numBookings = await getNumBookings(token);
-    console.log("numBookings:", numBookings);
-    console.log("maxBookings:", maxBookings);
-    setMaxPages(Math.ceil(numBookings/ maxBookings));
-    console.log(maxPages);
+    catch (err) {
+      setBookings([]);
+    }
 
+    setDeleted(false);
+  }
+
+  async function updateFlats() {
+    let offers = {};
+    for (const booking of bookings) {
+      offers[booking.uuid] = await getOffer(token, booking.offer_uuid);
+    }
+    setFlats(offers);
+    
     setLoading(false);
   }
 
   useEffect(() => {
     updateBookings();
-  }, [page]);
+  }, [page, deleted]);
+
+  useEffect(() => {
+    updateFlats();
+  }, [bookings]);
+
+  const getBookingView = (booking) => {
+    if (!(booking.uuid in flats)) {
+      return <View key={booking.uuid}/>
+    }
+    const flat = flats[booking.uuid][0];
+
+    return (
+      <View key={booking.uuid}>
+        <View style={listStyles.itemWrap}>
+          <TouchableOpacity onPress={() => navigation.navigate('BookingScreen', {booking: booking, flat: flat})}>
+            <EntypoIcon name="book" size={65} color={INDEPENDENCE}/>
+          </TouchableOpacity>
+          <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
+            <Text style={[listStyles.details, {fontFamily: 'SourceSansPro-Bold', fontSize: 16}]}>
+              Booking {booking.uuid.slice(0,10) + '...'}
+            </Text>
+            <Text style={listStyles.details}>
+              <Text style={{fontWeight: 'bold'}}>Flat:</Text> {flat.name}
+            </Text>
+            <Text style={listStyles.details}>
+              <Text style={{fontWeight: 'bold'}}>Dates:</Text> from {booking.dateFrom} till {booking.dateTo}
+            </Text>
+          </View>
+        </View>
+        <HorizontalRule color={'#606060'} width={2}/>
+      </View>
+    )
+  }
 
   const getContent = () => (
     <View style={listStyles.wrap}>
@@ -102,10 +107,10 @@ function BookingsScreen({ navigation }) {
                         onPress={() => setPage(page-1)}/> : <></>}
           </View>
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={listStyles.pages}>{page+1}/{maxPages}</Text>
+            <Text style={listStyles.pages}>{page+1}</Text>
           </View>
           <View style={{flex: 1}}>
-            {page !== maxPages-1 ?
+            {page < maxPages ? 
             <AwesomeIcon name="chevron-right"
                         size={iconSize}
                         color={iconColor}

@@ -36,20 +36,17 @@ export const getOffers = async (token, page, itemsOnPage) => (
             throw response;
         }
     })
-    .catch(error => {
-        console.error(JSON.stringify(error));
-    })
 )
 
-export const getNumOffers = async (token) => (
-    await fetch(`${BASE_URL}/logic/api/offers`, {
+export const getOffer = async (token, offerUuid) => (
+    await fetch(`${BASE_URL}/logic/api/offers/${offerUuid}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
     .then(response => {
         if (response.ok) {
-            return Object.keys(response.json()).length;
+            return response.json();
         } else {
             throw response;
         }
@@ -92,9 +89,6 @@ export const getOfferImageBase64 = async (token, offerImageUuid) => (
         reader.onerror = reject;
         reader.readAsDataURL(blob);
     }))
-    .catch(error => {
-        console.error(JSON.stringify(error));
-    })
 )
 
 
@@ -102,36 +96,38 @@ export const getBookings = async (token, page, itemsOnPage) => (
     await fetch(`${BASE_URL}/logic/api/bookings?page=${page}&itemsOnPage=${itemsOnPage}`, {
         headers: {
             Authorization: `Bearer ${token}`
-        }})
+        }
+    })
     .then(response => {
         if (response.ok) {
-            console.log(response.json()); return response.json();
+            return response.json();
         } else {
             throw response;
         }
     })
-    .catch(error => {
-        console.error(JSON.stringify(error));
-    })
 )
 
-export const getNumBookings = async (token) => (
-    await fetch(`${BASE_URL}/logic/api/bookings`, {
+// DELETE methods
+
+export const deleteBooking = async (token, bookingUuid) => (
+    await fetch(`${BASE_URL}/logic/api/bookings/${bookingUuid}`, {
+        method: 'DELETE',
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
     .then(response => {
-        if (response.ok) {
-            console.log(response.json()); return Object.keys(response.json()).length;
+        if (response.ok){
+            return response;
         } else {
             throw response;
         }
     })
-    .catch(error => {
-        console.error(JSON.stringify(error));
-    })
 )
+
+
+/////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!//
 
 // POST methods
 
@@ -227,18 +223,3 @@ export const deleteOffer = async (offerId) => {
         })
 }
 
-export const deleteBooking = async (bookingId) => {
-    await fetch(`${BASE_URL}/bookings?bookingUuid=${bookingId}`, {
-        method: 'DELETE'
-    })
-        .then(response => {
-            if (response.ok){
-                return response.json();
-            } else {
-                throw response;
-            }
-        })
-        .catch(error => {
-            console.error(JSON.stringify(error));
-        })
-}

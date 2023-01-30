@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { listStyles } from '../styles/ListStyles';
 import { useState, useEffect } from 'react';
-import { getNumOffers, getOfferImageBase64, getOfferImages, getOffers } from './utils/apiCalls';
+import { getOfferImageBase64, getOfferImages, getOffers } from './utils/apiCalls';
 import { useRecoilValue } from 'recoil';
 import { getUserToken } from '../recoil/recoil';
 import { TURQUOISE } from '../styles/Colors';
@@ -17,17 +17,24 @@ function FlatsScreen({ navigation }) {
   const maxFlats = 3;
   const [page, setPage] = useState(0);
   const token = useRecoilValue(getUserToken);
-  const [maxPages, setMaxPages] = useState(1);
+  const maxPages = 50;
   const [loading, setLoading] = useState(true);
   const [flats, setFlats] = useState([]);
   const [uris, setUris] = useState({});
 
-  async function getFlats() {
+  async function updateFlats() {
     setLoading(true);
 
-    const flats = await getOffers(token, page+1, maxFlats);
-    setFlats(flats);
-    
+    try {
+      const flats = await getOffers(token, page+1, maxFlats);
+      setFlats(flats);
+    }
+    catch (err) {
+      setFlats([]);
+    }
+  }
+
+  async function updateURIs() {
     let urls = {}
     for (const flat of flats) {
       const images = await getOfferImages(token, flat.uuid);
@@ -36,15 +43,17 @@ function FlatsScreen({ navigation }) {
       }
     }
     setUris(urls);
-    
-    const numOffers = await getNumOffers(token);
-    setMaxPages(Math.ceil(numOffers/ maxFlats));
+
     setLoading(false);
   }
 
   useEffect(() => {
-    getFlats();
-  }, [page]);
+    updateFlats();
+  }, [page, ]);
+
+  useEffect(() => {
+    updateURIs();
+  }, [flats]);
 
   const getFlatView = (flat) => (
     <View key={flat.uuid}>
@@ -93,10 +102,10 @@ function FlatsScreen({ navigation }) {
                          onPress={() => setPage(page-1)}/> : <></>}
           </View>
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={listStyles.pages}>{page+1}/{maxPages}</Text>
+            <Text style={listStyles.pages}>{page+1}</Text>
           </View>
           <View style={{flex: 1}}>
-            {page !== maxPages-1 ?
+            {page < maxPages ?
             <AwesomeIcon name="chevron-right"
                          size={iconSize}
                          color={iconColor}
