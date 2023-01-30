@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pw.react.backend.models.Booking;
 import pw.react.backend.models.BookingNotification;
 import pw.react.backend.models.Offer;
+import pw.react.backend.models.OfferImage;
 import pw.react.backend.models.User;
 import pw.react.backend.web.BookingDto;
 import pw.react.backend.web.OfferDto;
 import pw.react.backend.dao.BookingNotificationRepository;
+import pw.react.backend.dao.OfferImageRepository;
 import pw.react.backend.dao.OfferRepository;
 import pw.react.backend.dao.UserRepository;
 
@@ -28,6 +30,9 @@ class OfferService implements IOfferService {
 
     @Autowired
     private BookingNotificationRepository bookingNotificationRepository;
+
+    @Autowired
+    private OfferImageRepository offerImageRepository;
 
     private UserRepository userRepository;
     @Autowired
@@ -76,6 +81,10 @@ class OfferService implements IOfferService {
 
             for (BookingNotification notification : maybeOffer.get().getBookingNotifications()) {
                 bookingNotificationRepository.deleteById(notification.getId());
+            }
+
+            for (OfferImage image : maybeOffer.get().getImages()) {
+                offerImageRepository.deleteById(image.getUuid());
             }
 
             offerRepository.deleteById(uuid);
