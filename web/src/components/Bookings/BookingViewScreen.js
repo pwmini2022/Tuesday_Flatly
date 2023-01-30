@@ -16,7 +16,7 @@ function BookingViewScreen() {
     const [images, setImages] = useState([]);
 
     useEffect(() => {
-        getBookings(jwt, id).then(_booking => {
+        getBookings(jwt, id, NaN).then(_booking => {
             setBooking(_booking[0]);
         })
         
@@ -47,7 +47,9 @@ function BookingViewScreen() {
                 </div>
             </div>
             <div className='viewFlatBtn' >
-                <Link to="/bookings"><input type="button" value="Cancel" onClick={() => deleteBooking(jwt, id)}/></Link>
+                <Link to="/bookings"><input type="button" value="Cancel" onClick={() => {
+                    deleteBooking(jwt, id);
+                }}/></Link>
             </div>
         </div>
     )

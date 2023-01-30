@@ -133,7 +133,7 @@ export const getBookings = async (token, bookingId, ownerId) => {
         query = `?ownerId=${ownerId}`;
     }
 
-    return await fetch(`${BASE_URL}/logic/api/bookings/${query}`, {
+    return await fetch(`${BASE_URL}/logic/api/bookings${query}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -153,13 +153,13 @@ export const getBookings = async (token, bookingId, ownerId) => {
 // POST methods
 
 export const postOffer = async (token, ownerId, offers) => {
-    return await fetch(`${BASE_URL}/logic/api/offers/${ownerId}`, {
+    return await fetch(`${BASE_URL}/logic/api/offers?ownerId=${ownerId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(offers),
-        headers: {
+        headers: { 
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify(offers),
     })
         .then(response => {
             if (response.ok) {

@@ -214,8 +214,12 @@ form a {
 .viewFlat {
     margin-top: 20px;
     margin-left: 100px;
-    display: inline-flex;
     width: 90% ;
+}
+
+.addFlatDesc {
+    margin-top: 100px;
+    margin-left: 100px;
 }
 
 .viewFlat h2 {
@@ -259,7 +263,7 @@ form a {
 
 #viewFlatFlexAround {
     display: flex;
-    justify-content: space-around;
+    flex-direction: row;
 }
 
 .viewFlatBtn input {
