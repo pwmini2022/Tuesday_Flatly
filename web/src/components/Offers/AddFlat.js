@@ -45,6 +45,7 @@ function AddFlat() {
                     "name": "",
                     "price": 0,
                 })
+
                 return res;
             })
             .then(res => {

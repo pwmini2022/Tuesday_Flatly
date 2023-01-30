@@ -57,7 +57,7 @@ function FlatViewScreen() {
             <div className='viewFlat'>
                 <div className='displayInlineFlex'>
                     <input type="button" value="<" onClick={() => setIndex(index-1)}/>
-                    <img src={images[index % images.length] ? images[index % images.length] : img} width="400px"></img>
+                    <img alt={"Apartment"} src={images[index % images.length] ? images[index % images.length] : img} style={{height: "500px"}} width="400px"/>
                     <input type="button" value=">" onClick={() => setIndex(index+1)}/>
                 </div>
                 <h2>{flat.name}</h2>

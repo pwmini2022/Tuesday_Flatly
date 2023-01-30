@@ -25,7 +25,7 @@ function FlatItem(props) {
     return (
         <div>
             <div className='apartmentList'>
-                <img src={images[0] ? images[0] : img}  width="200px"/>
+                <img alt="Apartment" src={images[0] ? images[0] : img} style={{height: "200px"}}  width="200px"/>
                 <div className='width'>
                     <p className='text' id='top'><b>Apartment</b> {props.flat.name}</p>
                     <p className='text'><b>Location:</b> {props.flat.location}</p>
