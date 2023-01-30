@@ -235,10 +235,10 @@ public class OfferController {
             @ApiResponse(responseCode = "200", description = "Offer [ID: ...] updated"),
             @ApiResponse(responseCode = "400", description = "Offer [ID: ...] does not exist")
     })
-    @PutMapping(path = "")
+    @PutMapping(path = "/{offerUuid}")
     public ResponseEntity<String> updateOffer(@RequestHeader HttpHeaders headers,
             @RequestBody OfferDto updatedOffer,
-            @RequestParam String offerUuid) {
+            @PathVariable String offerUuid) {
         Offer offer = OfferDto.convertToOffer(updatedOffer);
         offer.setUuid(offerUuid);
         if (offerService.updateOffer(offerUuid, offer).isEmpty()) {
@@ -252,9 +252,9 @@ public class OfferController {
             @ApiResponse(responseCode = "200", description = "Offer [ID: ...] deleted"),
             @ApiResponse(responseCode = "400", description = "Offer [ID: ...] does not exist")
     })
-    @DeleteMapping(path = "")
+    @DeleteMapping(path = "/{offerUuid}")
     public ResponseEntity<String> deleteOffer(@RequestHeader HttpHeaders headers,
-            @RequestParam String offerUuid) {
+            @PathVariable String offerUuid) {
         logHeaders(headers);
         boolean deleted = offerService.deleteOffer(offerUuid);
 
