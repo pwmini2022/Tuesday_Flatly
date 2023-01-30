@@ -1,20 +1,23 @@
 const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io';
 
-const convertToQuery = (selectedParam, param) => {
+const convertToQuery = (selectedParam, param, sort, page, itemsPerPage) => {
     let query = "";
 
-    if (!selectedParam || !param)
-        return query;
-
-    if (selectedParam == "dateFrom" || selectedParam == "dateTo" || selectedParam == "numberOfAdults"
-        || selectedParam == "numberOfAdults") {
+    if (selectedParam === "dateFrom" || selectedParam === "dateTo" || selectedParam === "numberOfAdults"
+        || selectedParam === "numberOfAdults") {
         if (!isNaN(parseInt(param)))
-            query = `?${selectedParam}=${parseInt(param)}`;
-    } else if (selectedParam == "uuid") {
-        query = `${param}`;
+            query = `&${selectedParam}=${parseInt(param)}`;
+    } else if (selectedParam === "uuid") {
+        query = `/${param}`;
     } else {
-        query = `?${selectedParam}=${param}`;
+        query = `&${selectedParam}=${param}`;
     }
+
+    if (sort) {
+        query += selectedParam ? '&' : '?' + `sortBy=${sort}`;
+    }
+
+    query += (selectedParam || sort ? '&' : '?') + `page=${page}&temsOnPage=${itemsPerPage}`; 
 
     return query;
 }
@@ -57,9 +60,9 @@ export const signup = async (userCredentials) => (
 
 // GET methods
 
-export const getOffers = async (token, selectedParam, queryParams, sort) => {
-    const params = convertToQuery(selectedParam, queryParams);
-    return await fetch(`${BASE_URL}/logic/api/offers/${params}?${sort ? `sortBy=${sort}` : ''}`, {
+export const getOffers = async (token, selectedParam, queryParams, sort, page, itemsPerPage) => {
+    const params = convertToQuery(selectedParam, queryParams, sort, page, itemsPerPage);
+    return await fetch(`${BASE_URL}/logic/api/offers${params}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -173,13 +176,39 @@ export const postOffer = async (token, ownerId, offers) => {
         })
 }
 
+// works with the fileContent object from use-file-picker
+// again, if only we went with TypeScript to make this obvious :(
+export const postOfferImage = async (token, offerUuid, fileContent) => {
+    var data = new FormData();
+    data.append("file", new File([fileContent.content], fileContent.name));
+    console.log(data.get('file'));
+
+    return await fetch(`${BASE_URL}/logic/api/offerImages/${offerUuid}`, {
+        method: 'POST',
+        body: data,
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw response;
+            }
+        })
+        .catch(error => {
+            console.error(JSON.stringify(error));
+        })
+}
+
 export const postBooking = async (token, offerId, bookings) => {
     return await fetch(`${BASE_URL}/logic/api/bookings/${offerId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookings),
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
         }
     })
         .then(response => {
@@ -199,10 +228,10 @@ export const postBooking = async (token, offerId, bookings) => {
 export const putOffer = async (token, offerId, offer) => {
     return await fetch(`${BASE_URL}/logic/api/offers/${offerId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(offer),
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
         }
     })
         .then(response => {
@@ -220,10 +249,10 @@ export const putOffer = async (token, offerId, offer) => {
 export const putBooking = async (token, bookingId, booking) => {
     await fetch(`${BASE_URL}/logic/api/bookings/${bookingId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(booking),
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
         }
     })
         .then(response => {

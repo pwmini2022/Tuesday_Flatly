@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { postOffer } from '../utils/apiCalls'
+import { postOffer, postOfferImage } from '../utils/apiCalls'
 import { token, user } from '../utils/Atoms';
 
+import { useFilePicker } from 'use-file-picker';
+
 import '../styles.css'
-import img from '../../img.jpg'
+import selectImage from '../../selectImage.png'
 
 function AddFlat() {
     const [jwt] = useRecoilState(token);
@@ -19,6 +21,13 @@ function AddFlat() {
         "description": "",
         "name": "",
         "price": 0,
+    });
+
+    const [openFileSelector, { filesContent }] = useFilePicker({
+        readAs: 'DataURL',
+        accept: 'image/*',
+        multiple: true,
+        maxFileSize: 50
     });
 
     const handleClick = () => {
@@ -36,6 +45,18 @@ function AddFlat() {
                     "name": "",
                     "price": 0,
                 })
+                return res;
+            })
+            .then(res => {
+                console.log(res[0].uuid);
+
+                // post all images after we know which uuid to attach to
+                for (const fileContent of filesContent) {
+                    postOfferImage(jwt, res[0].uuid, fileContent)
+                        .then(res => {
+                            console.log(res);
+                        });
+                }
             })
             .catch(err => console.error(JSON.stringify(err)))
         }
@@ -44,7 +65,8 @@ function AddFlat() {
     return (
         <div>
             <div className='viewAddFlat'>
-                <img src={img} width="400px"></img>
+                <img style={{cursor: "pointer"}} src={filesContent.length ? filesContent[0].content : selectImage} alt="Upload" width="400px" onClick={() => openFileSelector()} />
+
                 <div id='viewFlatFlexAround'>
                     <div className='flatDesc' id='inputTop'>
                         <p><b>Name:</b></p> 
@@ -53,7 +75,7 @@ function AddFlat() {
                         <p><b>Start Date:</b></p> 
                         <p><b>End Date:</b></p> 
                         <p><b>Number of kids:</b></p> 
-                        <p><b>Number of adults:</b></p> 
+                        <p><b>Number of adults:</b></p>
                     </div>
                     <div className='inputs'>
                         <input type="text" value={flat.name} onChange={e => {setFlat({...flat, name: e.target.value})}}/>
@@ -67,7 +89,7 @@ function AddFlat() {
                 </div>
             </div>
             <div className='flatDesc' id='border'>
-                <input  type="text" value={flat.description} placeholder="Description" onChange={e => {setFlat({...flat, description: e.target.value})}}/>
+                <input type="text" value={flat.description} placeholder="Description" onChange={e => {setFlat({...flat, description: e.target.value})}}/>
             </div>
             <div className='viewFlatBtn'>
                 <input type="button" value="SAVE" onClick={() => handleClick()}/>
