@@ -18,18 +18,20 @@ import static java.util.stream.Collectors.toSet;
 
 @Configuration
 public class MainConfig {
-
     private static final Logger log = LoggerFactory.getLogger(MainConfig.class);
 
     private final String corsUrls;
     private final String corsMappings;
+    private final String booklyNotificationPath;
 
     private static final Map<String, String> envPropertiesMap = System.getenv();
 
     public MainConfig(@Value(value = "${cors.urls}") String corsUrls,
-                      @Value(value = "${cors.mappings}") String corsMappings) {
+                      @Value(value = "${cors.mappings}") String corsMappings,
+                      @Value(value = "${bookly.notificationpath}") String booklyNotificationPath) {
         this.corsUrls = corsUrls;
         this.corsMappings = corsMappings;
+        this.booklyNotificationPath = booklyNotificationPath;
     }
 
     @PostConstruct
@@ -46,13 +48,13 @@ public class MainConfig {
     }
 
     @Bean
-    public HttpService httpService(RestTemplate restTemplate) {
-        return new HttpBaseService(restTemplate);
+    public IExternalNotificationService httpService(RestTemplate restTemplate) {
+        return new ExternalNotificationService(restTemplate, booklyNotificationPath);
     }
 
     @Bean
-    public UserService userService(UserRepository userRepository) {
-        return new UserMainService(userRepository);
+    public IUserService userService(UserRepository userRepository) {
+        return new UserService(userRepository);
     }
 
     @Bean
@@ -68,6 +70,11 @@ public class MainConfig {
     @Bean
     public IOfferImageService offerImageService(OfferImageRepository offerImageRepository) {
         return new OfferImageService(offerImageRepository);
+    }
+
+    @Bean
+    public IBookingNotificationService bookingNotificationService(BookingNotificationRepository bookingNotificationRepository) {
+        return new BookingNotificationService(bookingNotificationRepository);
     }
 
     @Bean

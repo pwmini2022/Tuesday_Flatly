@@ -10,7 +10,7 @@ import pw.react.backend.models.Offer;
 public interface IOfferService {
     Optional<Offer> updateOffer(String uuid, Offer updatedOffer);
     boolean deleteOffer(String uuid);
-    Optional<Offer> findById(String iuud);
+    Optional<Offer> findById(String uuid);
     Optional<Collection<BookingDto>> getAllBookings(String uuid);
     Optional<Collection<OfferDto>> saveAll(Collection<OfferDto> offers, Long ownerId);
 }

@@ -11,8 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Valid;
@@ -27,9 +25,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import pw.react.backend.models.Booking;
+import pw.react.backend.services.BookingNotificationService;
+import pw.react.backend.services.IBookingNotificationService;
 import pw.react.backend.services.IBookingService;
+import pw.react.backend.services.IExternalNotificationService;
 import pw.react.backend.services.IOfferService;
-import pw.react.backend.services.UserService;
+import pw.react.backend.services.IUserService;
 import pw.react.backend.utils.MySimpleUtils;
 import pw.react.backend.web.BookingDto;
 import pw.react.backend.dao.BookingRepository;
@@ -42,8 +43,14 @@ public class BookingController {
 
     private final BookingRepository repository;
     private final IBookingService bookingService;
-    private UserService userService;
+    private IUserService userService;
     private IOfferService offerService;
+
+    @Autowired
+    private IExternalNotificationService notificationService;
+
+    @Autowired
+    private IBookingNotificationService bookingNotificationService;
 
     public BookingController(BookingRepository repository, IBookingService bookingService) {
         this.repository = repository;
@@ -51,7 +58,7 @@ public class BookingController {
     }
 
     @Autowired
-    public void setUserService(UserService userService) {
+    public void setUserService(IUserService userService) {
         this.userService = userService;
     }
 
@@ -137,8 +144,17 @@ public class BookingController {
         logHeaders(headers);
 
         Optional<Collection<BookingDto>> maybeSaved = bookingService.saveAll(bookings, offerUuid);
-        return maybeSaved.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get())
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        if (maybeSaved.isPresent()) {
+            for (BookingDto bookingDto : maybeSaved.get()) {
+                bookingNotificationService.save(bookingDto, offerUuid, BookingNotificationService.CREATED);
+                log.info("New Notification Created: \n\n{}\n", bookingDto.uuid());
+            }
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @Operation(summary = "Create new booking")
@@ -153,8 +169,16 @@ public class BookingController {
 
         String offerUuid = booking.offer_uuid();
         Optional<Collection<BookingDto>> maybeSaved = bookingService.saveAll(Arrays.asList(booking), offerUuid);
-        return maybeSaved.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(maybeSaved.get().iterator().next())
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        if (maybeSaved.isPresent()) {
+            BookingDto savedDto = maybeSaved.get().iterator().next();
+            bookingNotificationService.save(savedDto, offerUuid, BookingNotificationService.CREATED);
+            log.info("New Notification Created: \n\n{}\n", savedDto.uuid());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @Operation(summary = "Update a booking")
@@ -168,9 +192,12 @@ public class BookingController {
             @Valid @RequestBody BookingDto updatedBooking) {
         Booking booking = BookingDto.convertToBooking(updatedBooking);
         booking.setUuid(bookingUuid);
+
         if (bookingService.updateBooking(bookingUuid, booking).isEmpty()) {
             return ResponseEntity.badRequest().body(String.format("Booking [ID: %s] does not exist.", bookingUuid));
         }
+
+        // TODO: notification for updates
         return ResponseEntity.ok(String.format("Booking [ID: %s] updated.", bookingUuid));
     }
 
@@ -188,6 +215,9 @@ public class BookingController {
         if (!deleted) {
             return ResponseEntity.badRequest().body(String.format("Booking [UUID: %s] does not exist", bookingUuid));
         }
+        notificationService.notifyBookly(bookingUuid);
+        // TODO: notification for deletions
+
         return ResponseEntity.ok(String.format("Booking [UUID: %s] deleted", bookingUuid));
     }
 

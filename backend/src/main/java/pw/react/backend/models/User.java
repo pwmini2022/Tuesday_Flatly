@@ -25,6 +25,9 @@ public class User implements UserDetails {
     private Set<Booking> bookings;
 
     @OneToMany(mappedBy="owner")
+    private Set<BookingNotification> bookingNotifications;
+
+    @OneToMany(mappedBy="owner")
     private Set<Offer> offers;
 
     public Long getId() {
@@ -92,6 +95,10 @@ public class User implements UserDetails {
 
     public Set<Offer> getOffers() {
         return offers;
+    }
+
+    public Set<BookingNotification> getBookingNotifications() {
+        return bookingNotifications;
     }
 
     @Override

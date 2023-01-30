@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import pw.react.backend.services.HttpService;
+//import pw.react.backend.services.IExternalNotificationService;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,8 +21,8 @@ import static org.assertj.core.api.Assertions.fail;
 @ActiveProfiles(profiles = {"mysql-dev"})
 class BackendApplicationTests {
 
-	@Autowired
-	private HttpService httpService;
+	// @Autowired
+	// private INotificationService httpService;
 
 	@Autowired
 	private RestTemplate restTemplate;

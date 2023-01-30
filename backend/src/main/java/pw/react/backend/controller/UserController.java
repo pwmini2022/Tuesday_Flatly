@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pw.react.backend.models.User;
-import pw.react.backend.services.UserService;
+import pw.react.backend.services.IUserService;
 import pw.react.backend.web.UserDto;
 
 @RestController
@@ -22,9 +22,9 @@ public class UserController {
     public static final String USERS_PATH = "/logic/api/users";
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    private final UserService userService;
+    private final IUserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(IUserService userService) {
         this.userService = userService;
     }
 
