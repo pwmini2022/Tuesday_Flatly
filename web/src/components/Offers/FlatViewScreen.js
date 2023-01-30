@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
 
-import { getOffers, putOffer, getOfferImages } from '../utils/apiCalls';
+import { getOffers, putOffer, getOfferImages, getFlat } from '../utils/apiCalls';
 import { token } from '../utils/Atoms';
 
 import '../styles.css';
@@ -17,7 +17,7 @@ function FlatViewScreen() {
     const [images, setImages] = useState([]);
     
     useEffect(() => {
-        getOffers(jwt, "uuid", id).then(_flats => {
+        getFlat(jwt, id).then(_flats => {
             setFlat(_flats[0]);
         })
 

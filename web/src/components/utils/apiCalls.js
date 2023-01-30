@@ -8,8 +8,6 @@ const convertToQuery = (selectedParam, param, sort, page, itemsPerPage) => {
             || selectedParam === "numberOfAdults") {
             if (!isNaN(parseInt(param)))
                 query = `?${selectedParam}=${parseInt(param)}`;
-        } else if (selectedParam == "uuid") {
-            query = `/${param}`;
         } else {
             query = `?${selectedParam}=${param}`;
         }
@@ -61,6 +59,24 @@ export const signup = async (userCredentials) => (
 
 
 // GET methods
+
+export const getFlat = async (token, id) => {
+    return await fetch(`${BASE_URL}/logic/api/offers/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw response;
+            }
+        })
+        .catch(error => {
+            console.error(JSON.stringify(error));
+        })
+}
 
 export const getOffers = async (token, selectedParam, queryParams, sort, page, itemsPerPage) => {
     const params = convertToQuery(selectedParam, queryParams, sort, page, itemsPerPage);
