@@ -17,6 +17,7 @@ export const listStyles = StyleSheet.create({
     backgroundColor: 'gainsboro',
     margin: 20,
     padding: 20,
+    paddingBottom: 15,
     borderRadius: 15,
     width: '90%'
   },

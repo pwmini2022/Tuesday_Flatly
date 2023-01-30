@@ -7,6 +7,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { getUserToken } from '../recoil/recoil';
 import { INDEPENDENCE, TURQUOISE } from '../styles/Colors';
 import { bookingDeleted } from '../recoil/recoil';
+import { getDate } from './utils/getDate';
 
 import HorizontalRule from './HorizontalRule';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome5';
@@ -78,7 +79,7 @@ function BookingsScreen({ navigation }) {
               <Text style={{fontWeight: 'bold'}}>Flat:</Text> {flat.name}
             </Text>
             <Text style={listStyles.details}>
-              <Text style={{fontWeight: 'bold'}}>Dates:</Text> from {booking.dateFrom} till {booking.dateTo}
+              <Text style={{fontWeight: 'bold'}}>Dates:</Text> from {getDate(booking.dateFrom)} till {getDate(booking.dateTo)}
             </Text>
           </View>
         </View>

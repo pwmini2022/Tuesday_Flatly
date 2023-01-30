@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { getUserToken, bookingDeleted } from '../recoil/recoil';
 import { TURQUOISE } from '../styles/Colors';
+import { getDate } from './utils/getDate';
 
 import HomeScreen from './HomeScreen';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -74,10 +75,10 @@ function BookingScreen({ route, navigation }) {
             <Text style={flatStyles.fieldTitle}>Price:</Text> {flat.price} PLN / night
           </Text>
           <Text style={flatStyles.field}>
-            <Text style={flatStyles.fieldTitle}>Start date:</Text> {booking.dateFrom}
+            <Text style={flatStyles.fieldTitle}>Start date:</Text> {getDate(booking.dateFrom)}
           </Text>
           <Text style={flatStyles.field}>
-            <Text style={flatStyles.fieldTitle}>End date:</Text> {booking.dateTo}
+            <Text style={flatStyles.fieldTitle}>End date:</Text> {getDate(booking.dateTo)}
           </Text>
         </View>      
       </View>
