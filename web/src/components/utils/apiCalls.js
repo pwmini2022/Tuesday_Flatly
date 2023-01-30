@@ -3,21 +3,23 @@ const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io
 const convertToQuery = (selectedParam, param, sort, page, itemsPerPage) => {
     let query = "";
 
-    if (selectedParam === "dateFrom" || selectedParam === "dateTo" || selectedParam === "numberOfAdults"
-        || selectedParam === "numberOfAdults") {
-        if (!isNaN(parseInt(param)))
-            query = `&${selectedParam}=${parseInt(param)}`;
-    } else if (selectedParam === "uuid") {
-        query = `/${param}`;
-    } else {
-        query = `&${selectedParam}=${param}`;
+    if (selectedParam) {
+        if (selectedParam === "dateFrom" || selectedParam === "dateTo" || selectedParam === "numberOfAdults"
+            || selectedParam === "numberOfAdults") {
+            if (!isNaN(parseInt(param)))
+                query = `?${selectedParam}=${parseInt(param)}`;
+        } else if (selectedParam == "uuid") {
+            query = `/${param}`;
+        } else {
+            query = `?${selectedParam}=${param}`;
+        }
     }
 
     if (sort) {
-        query += selectedParam ? '&' : '?' + `sortBy=${sort}`;
+        query += (selectedParam ? '&' : '?') + `sortBy=${sort}`;
     }
 
-    query += (selectedParam || sort ? '&' : '?') + `page=${page}&temsOnPage=${itemsPerPage}`; 
+    query += ((selectedParam || sort) ? '&' : '?') + `page=${page}&itemsOnPage=${itemsPerPage}`; 
 
     return query;
 }
@@ -112,6 +114,7 @@ export const getOfferImages = async (token, offerUuid) => {
                 }
             })
             .then(blob => {
+                console.log(blob)
                 return URL.createObjectURL(blob);
             })
             .catch(error => {
