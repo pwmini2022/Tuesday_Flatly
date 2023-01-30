@@ -187,7 +187,7 @@ export const postBooking = async (token, offerId, bookings) => {
 
 export const putOffer = async (token, offerId, offer) => {
     offerUuid
-    return await fetch(`${BASE_URL}/logic/api/offers?offerUuid=${offerId}`, {
+    return await fetch(`${BASE_URL}/logic/api/offers/${offerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(offer),
