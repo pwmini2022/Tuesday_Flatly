@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pw.react.backend.models.Booking;
+import pw.react.backend.models.BookingNotification;
 import pw.react.backend.models.Offer;
 import pw.react.backend.models.User;
 import pw.react.backend.web.BookingDto;
 import pw.react.backend.web.OfferDto;
+import pw.react.backend.dao.BookingNotificationRepository;
 import pw.react.backend.dao.OfferRepository;
 import pw.react.backend.dao.UserRepository;
 
@@ -24,6 +26,9 @@ class OfferService implements IOfferService {
 
     private OfferRepository offerRepository;
     private IBookingService bookingService;
+
+    @Autowired
+    private BookingNotificationRepository bookingNotificationRepository;
 
     private UserRepository userRepository;
     @Autowired
@@ -66,10 +71,12 @@ class OfferService implements IOfferService {
         Optional<Offer> maybeOffer = offerRepository.findById(uuid);
 
         if (maybeOffer.isPresent()) {
-            Set<Booking> relatedBookings = maybeOffer.get().getBookings();
-
-            for (Booking booking : relatedBookings) {
+            for (Booking booking : maybeOffer.get().getBookings()) {
                 bookingService.deleteBooking(booking.getUuid());
+            }
+
+            for (BookingNotification notification : maybeOffer.get().getBookingNotifications()) {
+                bookingNotificationRepository.deleteById(notification.getId());
             }
 
             offerRepository.deleteById(uuid);
