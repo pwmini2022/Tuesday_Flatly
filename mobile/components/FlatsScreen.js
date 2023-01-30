@@ -1,14 +1,15 @@
 import { View, Text, Image, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { listStyles } from '../styles/ListStyles';
 import { useState, useEffect } from 'react';
-
-import HorizontalRule from './HorizontalRule';
-import AwesomeIcon from 'react-native-vector-icons/FontAwesome5';
-import HomeScreen from './HomeScreen';
-import { getNumOffers, getOfferImages, getOffers } from './utils/apiCalls';
+import { getNumOffers, getOfferImageBase64, getOfferImages, getOffers } from './utils/apiCalls';
 import { useRecoilValue } from 'recoil';
 import { getUserToken } from '../recoil/recoil';
 import { TURQUOISE } from '../styles/Colors';
+
+import HorizontalRule from './HorizontalRule';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import HomeScreen from './HomeScreen';
 
 function FlatsScreen({ navigation }) {
   const iconSize = 30;
@@ -19,27 +20,45 @@ function FlatsScreen({ navigation }) {
   const [maxPages, setMaxPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [flats, setFlats] = useState([]);
-  const [uri, setUri] = useState("");
+  const [uris, setUris] = useState({});
 
-  const toDataURL = async (url) => await fetch(url, {headers: {Authorization: 'Bearer '+token}})
-  .then(response => response.blob())
-  .then(blob => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  }))
+  async function getFlats() {
+    setLoading(true);
+
+    const flats = await getOffers(token, page+1, maxFlats);
+    setFlats(flats);
+    
+    let urls = {}
+    for (const flat of flats) {
+      const images = await getOfferImages(token, flat.uuid);
+      if (images.length) {
+        urls[flat.uuid] = await getOfferImageBase64(token, images[0].offerImageUuid)
+      }
+    }
+    setUris(urls);
+    
+    const numOffers = await getNumOffers(token);
+    setMaxPages(Math.ceil(numOffers/ maxFlats));
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    getFlats();
+  }, [page]);
 
   const getFlatView = (flat) => (
     <View key={flat.uuid}>
       <View style={listStyles.itemWrap}>
         <TouchableHighlight onPress={() => navigation.navigate('FlatScreen', {flat: flat})}>
-          <Image
-            style={listStyles.image}
-            source={{
-              uri: uri,
-            }}
-          />
+          {flat.uuid in uris ?
+            <Image
+              style={listStyles.image}
+              source={{
+                uri: uris[flat.uuid]
+              }}
+            /> :
+            <MaterialIcon name="house" size={100}/>
+          }
         </TouchableHighlight>
         <View style={{flex: 1, justifyContent: 'center', marginLeft: 15}}>
           <Text style={[listStyles.details, {fontFamily: 'SourceSansPro-Bold', fontSize: 16}]}>
@@ -53,31 +72,6 @@ function FlatsScreen({ navigation }) {
       <HorizontalRule color={'#606060'} width={2}/>
     </View>
   )
-
-  async function getFlats() {
-    setLoading(true);
-    console.log(page);
-
-    await toDataURL('https://springserviceflatly-pw2022flatly.azuremicroservices.io/logic/api/offerImages/e0262e81-e4bf-44c8-9c08-b436f718a6d8')
-    .then(dataUrl => setUri(dataUrl));
-
-    //const images = getOfferImages(token, flat.u)
-
-    const flats = await getOffers(token, page+1, maxFlats);
-    setFlats(flats);
-    
-    const numOffers = await getNumOffers(token);
-    setMaxPages(Math.ceil(numOffers/ maxFlats));
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    getFlats();
-  }, [page]);
-
-  useEffect(() => {
-    getContent();
-  }, [page]);
 
   const getContent = () => (
     <View style={listStyles.wrap}>

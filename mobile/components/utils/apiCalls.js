@@ -59,10 +59,8 @@ export const getNumOffers = async (token) => (
     })
 )
 
-export const getOfferImages = async (token, offerUuid) => {
-    const images = [];
-
-    const imagesData = await fetch(`${BASE_URL}/logic/api/offerImages?offerUuid=${offerUuid}`, {
+export const getOfferImages = async (token, offerUuid) => (
+    await fetch(`${BASE_URL}/logic/api/offerImages?offerUuid=${offerUuid}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -74,40 +72,30 @@ export const getOfferImages = async (token, offerUuid) => {
             throw response;
         }
     })
+)
+
+export const getOfferImageBase64 = async (token, offerImageUuid) => (
+    await fetch(`${BASE_URL}/logic/api/offerImages/${offerImageUuid}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }})
+    .then(response => {
+        if (response.ok) {
+            return response.blob();
+        } else {
+            throw response;
+        }
+    })
+    .then(blob => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    }))
     .catch(error => {
         console.error(JSON.stringify(error));
     })
-
-    console.log(imagesData);
-    
-    /*
-    for (const imageData of imagesData) {
-        console.log(imageData);
-
-        const image = await fetch(`${BASE_URL}/logic/api/offerImages/${imageData.offerImageUuid}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log(response);
-                return response.json();
-            } else {
-                throw response;
-            }
-        })
-        .catch(error => {
-            console.error(JSON.stringify(error));
-        })
-
-        console.log(image);
-
-        images.push(image);
-    }*/
-    
-    return images;
-}
+)
 
 /////////////////////////////////////////
 /* DOWN FROM HERE WE HAVE TO CHANGE!!! */
