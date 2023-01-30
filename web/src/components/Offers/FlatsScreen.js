@@ -58,7 +58,7 @@ function FlatScreen() {
 
                 {flats.map(flat => {
                     return (
-                        <FlatItem key={flat.offerUuid} flat={flat} refresh={refresh}/>
+                        <FlatItem key={flat.uuid} flat={flat} refresh={refresh}/>
                     )
                 })}
             </div>
