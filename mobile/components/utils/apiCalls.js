@@ -97,23 +97,41 @@ export const getOfferImageBase64 = async (token, offerImageUuid) => (
     })
 )
 
-/////////////////////////////////////////
-/* DOWN FROM HERE WE HAVE TO CHANGE!!! */
-/////////////////////////////////////////
 
-export const getBookings = async (ownerId, offerId) => {
-    return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`)
-        .then(response => {
-            if (response.ok){
-                return response.json();
-            } else {
-                throw response;
-            }
-        })
-        .catch(error => {
-            console.error(JSON.stringify(error));
-        })
-}
+export const getBookings = async (token, page, itemsOnPage) => (
+    await fetch(`${BASE_URL}/logic/api/bookings?page=${page}&itemsOnPage=${itemsOnPage}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }})
+    .then(response => {
+        if (response.ok) {
+            console.log(response.json()); return response.json();
+        } else {
+            throw response;
+        }
+    })
+    .catch(error => {
+        console.error(JSON.stringify(error));
+    })
+)
+
+export const getNumBookings = async (token) => (
+    await fetch(`${BASE_URL}/logic/api/bookings`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log(response.json()); return Object.keys(response.json()).length;
+        } else {
+            throw response;
+        }
+    })
+    .catch(error => {
+        console.error(JSON.stringify(error));
+    })
+)
 
 // POST methods
 
