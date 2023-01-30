@@ -150,7 +150,9 @@ export const postOffer = async (token, ownerId, offers) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(offers),
-        Authorization: `Bearer ${token}`
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
             if (response.ok) {
@@ -169,7 +171,9 @@ export const postBooking = async (token, offerId, bookings) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookings),
-        Authorization: `Bearer ${token}`
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
             if (response.ok) {
@@ -190,7 +194,9 @@ export const putOffer = async (token, offerId, offer) => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(offer),
-        Authorization: `Bearer ${token}`
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
             if (response.ok) {
@@ -209,7 +215,9 @@ export const putBooking = async (token, bookingId, booking) => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(booking),
-        Authorization: `Bearer ${token}`
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
             if (response.ok) {
@@ -228,7 +236,9 @@ export const putBooking = async (token, bookingId, booking) => {
 export const deleteOffer = async (token, offerId) => {
     await fetch(`${BASE_URL}/logic/api/offers/${offerId}`, {
         method: 'DELETE',
-        Authorization: `Bearer ${token}`
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
             if (response.ok) {
@@ -245,7 +255,9 @@ export const deleteOffer = async (token, offerId) => {
 export const deleteBooking = async (token, bookingId) => {
     await fetch(`${BASE_URL}/logic/api/bookings/${bookingId}`, {
         method: 'DELETE',
-        Authorization: `Bearer ${token}`
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
             if (response.ok) {
