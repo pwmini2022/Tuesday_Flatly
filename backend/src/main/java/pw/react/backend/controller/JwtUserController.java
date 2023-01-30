@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pw.react.backend.models.User;
-import pw.react.backend.services.UserService;
+import pw.react.backend.services.IUserService;
 import pw.react.backend.web.UserDto;
 
 import java.util.Optional;
@@ -22,10 +22,10 @@ public class JwtUserController {
     public static final String USERS_PATH = "/logic/api/users";
     private static final Logger log = LoggerFactory.getLogger(JwtUserController.class);
 
-    private final UserService userService;
+    private final IUserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    public JwtUserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public JwtUserController(IUserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }

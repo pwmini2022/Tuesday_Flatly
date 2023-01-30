@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import LoggedHeader from './LoggedHeader';
-import img from '../img.jpg'
+import img from '../../img.jpg'
 
-import { postOffer } from './utils/apiCalls'
+import { postOffer } from '../utils/apiCalls'
 
-import './styles.css'
+import '../styles.css'
 
 function AddFlat() {
     const [flat, setFlat] = useState({
@@ -23,7 +22,6 @@ function AddFlat() {
 
     return (
         <div>
-            <LoggedHeader/>
             <div className='viewFlat'>
                 <img src={img} width="400px"></img>
                 <div id='viewFlatFlexAround'>

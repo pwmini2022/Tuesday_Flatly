@@ -10,9 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.jsf.FacesContextUtils;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 
 import pw.react.backend.models.Offer;
 import pw.react.backend.services.IOfferService;
-import pw.react.backend.services.UserService;
+import pw.react.backend.services.IUserService;
 import pw.react.backend.utils.MySimpleUtils;
 import pw.react.backend.web.OfferDto;
 import pw.react.backend.dao.OfferRepository;
@@ -43,7 +40,7 @@ public class OfferController {
     private final OfferRepository offerRepository;
 
     private final IOfferService offerService;
-    private UserService userService;
+    private IUserService userService;
 
     public OfferController(OfferRepository repository, IOfferService offerService) {
         this.offerRepository = repository;
@@ -51,7 +48,7 @@ public class OfferController {
     }
 
     @Autowired
-    public void setUserService(UserService userService) {
+    public void setUserService(IUserService userService) {
         this.userService = userService;
     }
 
@@ -183,7 +180,7 @@ public class OfferController {
         // this is to avoid sending error codes for responses that were empty
         // without even failing to page...
         if (offerDtos.isEmpty()) {
-            ResponseEntity.ok(offerDtos);
+            return ResponseEntity.ok(offerDtos);
         }
 
         if (page != null && itemsOnPage == null || page == null && itemsOnPage != null) {
@@ -238,10 +235,10 @@ public class OfferController {
             @ApiResponse(responseCode = "200", description = "Offer [ID: ...] updated"),
             @ApiResponse(responseCode = "400", description = "Offer [ID: ...] does not exist")
     })
-    @PutMapping(path = "")
+    @PutMapping(path = "/{offerUuid}")
     public ResponseEntity<String> updateOffer(@RequestHeader HttpHeaders headers,
             @RequestBody OfferDto updatedOffer,
-            @RequestParam String offerUuid) {
+            @PathVariable String offerUuid) {
         Offer offer = OfferDto.convertToOffer(updatedOffer);
         offer.setUuid(offerUuid);
         if (offerService.updateOffer(offerUuid, offer).isEmpty()) {
@@ -255,9 +252,9 @@ public class OfferController {
             @ApiResponse(responseCode = "200", description = "Offer [ID: ...] deleted"),
             @ApiResponse(responseCode = "400", description = "Offer [ID: ...] does not exist")
     })
-    @DeleteMapping(path = "")
+    @DeleteMapping(path = "/{offerUuid}")
     public ResponseEntity<String> deleteOffer(@RequestHeader HttpHeaders headers,
-            @RequestParam String offerUuid) {
+            @PathVariable String offerUuid) {
         logHeaders(headers);
         boolean deleted = offerService.deleteOffer(offerUuid);
 

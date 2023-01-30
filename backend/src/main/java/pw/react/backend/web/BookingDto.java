@@ -12,7 +12,6 @@ public record BookingDto(String uuid,
                          String last_name,
                          long numberOfKids,
                          long numberOfAdults) {
-
     public static final BookingDto EMPTY = new BookingDto("", 0, "", 0, 0, "", "", 0, 0);
 
     public static BookingDto valueFrom(Booking booking) {

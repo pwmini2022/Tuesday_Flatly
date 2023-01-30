@@ -18,6 +18,35 @@ public class Offer implements Serializable {
     private String name;
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    @OneToMany(mappedBy="offer")
+    private Set<BookingNotification> bookingNotifications;
+
+    @OneToMany(mappedBy = "offer")
+    private Set<Booking> bookings;
+
+    @OneToMany(mappedBy = "offer")
+    private Set<OfferImage> images;
+
+    private String location;
+
+    private Long dateFrom;
+
+    private Long dateTo;
+
+    private Long numberOfKids;
+
+    private Long numberOfAdults;
+
+    private Long price;
+
+    public Set<BookingNotification> getBookingNotifications() {
+        return bookingNotifications;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -73,28 +102,6 @@ public class Offer implements Serializable {
     public void setNumberOfAdults(Long numberOfAdults) {
         this.numberOfAdults = numberOfAdults;
     }
-
-    private Long price;
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
-
-    @OneToMany(mappedBy = "offer")
-    private Set<Booking> bookings;
-
-    @OneToMany(mappedBy = "offer")
-    private Set<OfferImage> images;
-
-    private String location;
-
-    private Long dateFrom;
-
-    private Long dateTo;
-
-    private Long numberOfKids;
-
-    private Long numberOfAdults;
 
     public String getUuid() {
         return uuid;

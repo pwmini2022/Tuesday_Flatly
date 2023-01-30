@@ -9,8 +9,9 @@ main () {
 	export SPRING_PROFILES_ACTIVE=prod-azure-mysql,jwt
 	export TOKEN_SECRET=nahidontcare
 
-	mvn clean package -DskipTests -Denv=cloud
+	mvn -e clean package -DskipTests -Denv=cloud
 	java -jar "$1"
 }
 
 main "$@"
+
