@@ -17,6 +17,7 @@ import FlatScreen from '../Offers/FlatsScreen';
 import BookingsScreen from '../Bookings/BookingsScreen';
 import FlatViewScreen from '../Offers/FlatViewScreen';
 import BookingViewScreen from '../Bookings/BookingViewScreen';
+import AddFlat from '../Offers/AddFlat';
 import { logged } from '../utils/Atoms';
 
 function Webapp() {
@@ -36,6 +37,7 @@ function Webapp() {
             <Route path="Bookings" element={<BookingsScreen />} />
             <Route path="FlatsView/:id" element={<FlatViewScreen />} />
             <Route path="BookingsView/:id" element={<BookingViewScreen />} />
+            <Route path="AddFlat" element={<AddFlat />} />
         </Routes> : <></>
         }
         </>

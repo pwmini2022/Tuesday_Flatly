@@ -4,6 +4,7 @@ import { atom, selector } from 'recoil';
 export const user = atom({
     key: 'user',
     default: {
+        id: 0,
         username: '',
         email: ''
     },
@@ -22,6 +23,11 @@ export const logged = atom({
 export const numOfItems = atom({
     key: 'numOfItems',
     default: 10
+});
+
+export const sortBy = atom({
+    key: 'sortBy',
+    default: ''
 });
 
 export const currParam = atom({

@@ -8,8 +8,8 @@ import '../styles.css'
 function AddFlat() {
     const [flat, setFlat] = useState({
         "location": "",
-        "startDate": "2023-01-25T01:00:00",
-        "endDate": "2023-01-25T01:00:00",
+        "startDate": 0,
+        "endDate": 0,
         "numberOfKids": 0,
         "numberOfAdults": 0
     });
@@ -25,7 +25,7 @@ function AddFlat() {
             <div className='viewFlat'>
                 <img src={img} width="400px"></img>
                 <div id='viewFlatFlexAround'>
-                    <div className='flatDesc'>
+                    <div className='flatDesc' id='inputTop'>
                         <p><b>Location:</b></p> 
                         <p><b>Start Date:</b></p> 
                         <p><b>End Date:</b></p> 

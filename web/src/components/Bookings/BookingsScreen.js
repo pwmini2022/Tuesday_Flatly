@@ -1,38 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import BookingItem from './BookingItem';
+import { token, user } from '../utils/Atoms';
 
 import { getBookings } from '../utils/apiCalls'
  
 import '../styles.css';
 
 function BookingsScreen() {
+    const [index, setIndex] = useState(0);
+    const [jwt] = useRecoilState(token);
     const [bookings, setBookings] = useState([]);
+    const [userCred] = useRecoilState(user);
+    
     useEffect(() => {
-        // getBookings().then(_bookings => {
-        //     setBookings(_bookings);
-        // })
-
-        setBookings([{
-            "uuid": "0442a088-8f82-440f-bf2d-862ec8e0759a",
-            "admin_id": 2,
-            "offer_id": 1,
-            "startDate": "2023-01-25T14:38:43",
-            "endDate": "2023-01-25T14:38:43",
-            "first_name": "eks",
-            "last_name": "dee"
-        },{
-            "uuid": "0442a088-8f82-440f-bf2d-862ec8e0759a",
-            "admin_id": 2,
-            "offer_id": 1,
-            "startDate": "2023-01-25T14:38:43",
-            "endDate": "2023-01-25T14:38:43",
-            "first_name": "eks",
-            "last_name": "dee"
-        }
-    ])
+        getBookings(jwt, NaN, userCred.id).then(_bookings => {
+            setBookings(_bookings);
+        })
     }, []);
 
-    
+    console.log(userCred)
 
     return (
         <div>
@@ -44,6 +31,11 @@ function BookingsScreen() {
                     )
                 })}
             </div>  
+            
+            <div className='pageBtn'>
+                <input type="button" value="<" onClick={() => setIndex(index-1)}/>
+                <input type="button" value=">" onClick={() => setIndex(index+1)}/>
+            </div>
         </div>
     )
 }   

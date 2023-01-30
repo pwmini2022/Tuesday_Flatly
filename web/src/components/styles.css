@@ -214,8 +214,12 @@ form a {
 .viewFlat {
     margin-top: 20px;
     margin-left: 100px;
-    display: inline-block;
+    display: inline-flex;
     width: 90% ;
+}
+
+.viewFlat h2 {
+    margin-left: 200px;
 }
 
 .flatDesc {
@@ -230,10 +234,21 @@ form a {
     display: block;
 }
 
+.flatDesc input {
+    font-size: 30px;
+    width: 20%;
+}
+
+#desc {
+    border: 0px;
+    width: 99%;
+    margin: auto;
+}
+
 .viewFlatBtn {
-    margin-top: 50px;
+    margin-top: 200px;
     margin-bottom: 50px;
-    width: 90%;
+    margin-left: 45%;
 }
 
 #viewFlatFlex {
@@ -268,6 +283,14 @@ form a {
     flex-direction: column;
 }
 
+#inputTop{
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 40px;
+    text-align: left;
+}
+
 .inputs input {
     width: auto;
     height: 30px;
@@ -284,4 +307,27 @@ form a {
     border-radius: 5px;
     width: 20%;
     text-align: center;
+}
+
+#border {
+    border: 3px solid #282c34;
+    border-radius: 5px;
+    width: 80%;
+}
+
+.displayInlineFlex {
+    display: inline-flex;
+}
+
+.displayBlock {
+    display: block;
+}
+
+.pageBtn {
+    margin-left: 47%;
+}
+
+.pageBtn input{
+    margin-left: 3%;
+    font-size: 20px;
 }
