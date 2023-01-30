@@ -69,12 +69,12 @@ function FlatScreen() {
                         setFlats(_flats);
                     });
                 }} disabled={index === 1}/>
-                <input type="button" value=">" onClick={() => {
+                <input type="button" value=">" disabled={flats.length < itemsPage || err} onClick={() => {
                     setIndex(index+1);
                     getOffers(jwt, selectedParam, params, sort, index, itemsPage).then(_flats => {
                         setFlats(_flats);
                     });
-                }} disabled={err}/>
+                }}/>
             </div>
         </div>
     )
