@@ -32,7 +32,10 @@ function FlatItem(props) {
                     <p className='text'><b>Price:</b> {props.flat.price} $/night</p>
                 </div>
                 <Link to={`/flatsview/${props.flat.uuid}`} id='viewLeft-btn'><input type="button" className='search-btn' value="View"/></Link>
-                <input type="button" className='search-btn' id='view-btn' value="DELETE" onClick={() => deleteOffer(props.index)}/>
+                <input type="button" className='search-btn' id='view-btn' value="DELETE" onClick={() => {
+                    deleteOffer(jwt, props.flat.uuid);
+                    props.refresh(props.flat.uuid);
+                }}/>
             </div>
         </div>
     )

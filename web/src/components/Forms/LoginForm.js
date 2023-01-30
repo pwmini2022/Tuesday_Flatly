@@ -5,18 +5,20 @@ import Popup from '../Buttons/Popup';
 
 import '../styles.css';
 import { login } from '../utils/apiCalls';
-import { logged, token } from '../utils/Atoms';
+import { logged, token, user } from '../utils/Atoms';
 
 function LoginForm() {
     const [jwt, setJWT] = useRecoilState(token);
     const [log, setLog] = useRecoilState(logged);
+    const [userCred, setUserCred] = useRecoilState(user);
     const [error, setError] = useState({
         noInput: false,
         wrongInput: false
     });
     const [userCredentials, setUserCredentials] = useState({
         "username": "",
-        "password": ""
+        "password": "",
+        "id": 0,
     });
 
     const handleClick = () => {
@@ -26,6 +28,11 @@ function LoginForm() {
             setError({noInput: false, wrongInput: false});
             login(userCredentials).then(res => {
                 if (res) {
+                    setUserCred({
+                        "username": res.username,
+                        "email": res.email,
+                        "id": res.id,
+                    });
                     setJWT(res.jwttoken);
                     setLog(true);
                 } else {

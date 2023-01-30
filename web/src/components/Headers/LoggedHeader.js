@@ -26,6 +26,7 @@ function LoggedHeader() {
             <div className='right'>
                 <Link to="/"><p>Home</p></Link>
                 <Link to="/flats"><p>Flats</p></Link>
+                <Link to="/addflat"><p>Add Flat</p></Link>
                 <Link to="/bookings"><p>Bookings</p></Link>
                 <Link to="/login"><p onClick={() => {
                     setLog(false);

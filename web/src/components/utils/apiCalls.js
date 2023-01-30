@@ -57,9 +57,9 @@ export const signup = async (userCredentials) => (
 
 // GET methods
 
-export const getOffers = async (token, selectedParam, queryParams) => {
+export const getOffers = async (token, selectedParam, queryParams, sort) => {
     const params = convertToQuery(selectedParam, queryParams);
-    return await fetch(`${BASE_URL}/logic/api/offers/${params}`, {
+    return await fetch(`${BASE_URL}/logic/api/offers/${params}?${sort ? `sortBy=${sort}` : ''}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -125,8 +125,15 @@ export const getOfferImages = async (token, offerUuid) => {
 /* DOWN FROM HERE WE HAVE TO CHANGE!!! */
 /////////////////////////////////////////
 
-export const getBookings = async (token, ownerId, offerId) => {
-    return await fetch(`${BASE_URL}/logic/api/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`, {
+export const getBookings = async (token, bookingId, ownerId) => {
+    let query = "";
+    if (bookingId) {
+        query += `/${bookingId}`;
+    } else if (ownerId) {
+        query = `?ownerId=${ownerId}`;
+    }
+
+    return await fetch(`${BASE_URL}/logic/api/bookings${query}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -148,11 +155,11 @@ export const getBookings = async (token, ownerId, offerId) => {
 export const postOffer = async (token, ownerId, offers) => {
     return await fetch(`${BASE_URL}/logic/api/offers/${ownerId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(offers),
-        headers: {
+        headers: { 
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify(offers),
     })
         .then(response => {
             if (response.ok) {
