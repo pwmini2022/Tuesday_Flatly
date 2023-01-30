@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import LoggedHeader from './LoggedHeader';
-import img from '../img.jpg'
+import img from '../../img.jpg'
 
-import { getBookings } from './utils/apiCalls'
+import { getBookings } from '../utils/apiCalls'
 
-import './styles.css'
+import '../styles.css'
 
 const FLAT = {
     "uuid": "0442a088-8f82-440f-bf2d-862ec8e0759a",
@@ -18,15 +17,14 @@ const FLAT = {
 
 function BookingViewScreen(props) {
     const [booking, setBooking] = useState({});
-    // useEffect(() => {
-    //     getBookings(props.ownerId, props.OfferId).then(_booking => {
-    //         setBooking(_booking);
-    //     })
-    // }, []);
+    useEffect(() => {
+        getBookings(props.ownerId, props.OfferId).then(_booking => {
+            setBooking(_booking);
+        })
+    }, []);
 
     return (
         <div>
-            <LoggedHeader/>
             <div className='viewFlat'>
                 <img src={img} width="400px"></img>
 

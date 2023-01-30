@@ -1,19 +1,31 @@
-const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io'
-const JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaG9zdG9yYml0ZXIiLCJpcCI6IjE5NC4yOS4xMzcuMjIiLCJleHAiOjE2NzUwMjMwMDcsImlhdCI6MTY3NDkzNjYwNywidXNlci1hZ2VudCI6Ik1vemlsbGEvNS4wIChXaW5kb3dzIE5UIDEwLjA7IFdpbjY0OyB4NjQpIEFwcGxlV2ViS2l0LzUzNy4zNiAoS0hUTUwsIGxpa2UgR2Vja28pIENocm9tZS8xMDkuMC4wLjAgU2FmYXJpLzUzNy4zNiJ9.dhHDS4zq-WOZQkf5bYRkCe7gy7188gOFffgxaVEuedBSZjx9TRcFzeYMY4uF4cg9HdE77L6O2xI824l-zd1cwQ"
+const BASE_URL = 'https://springserviceflatly-pw2022flatly.azuremicroservices.io';
 
-// POST to /auth/login (username: "bruh1", "bruh2" or "bruh3", password: "moment") and get keep the token somewhere
-// then send the token in the Authorization header as "Bearer ..."
+const convertToQuery = (selectedParam, param) => {
+    let query = "";
 
-// Login
+    if (!selectedParam || !param)
+        return query;
 
-export const login = async (username, password) => {
-    return await fetch(`${BASE_URL}/auth/login`, {
+    if (selectedParam == "dateFrom" || selectedParam == "dateTo" || selectedParam == "numberOfAdults" 
+        || selectedParam == "numberOfAdults") {
+            if (!isNaN(parseInt(param)))
+                query = `?${selectedParam}=${parseInt(param)}`;
+        } else if (selectedParam == "uuid") {
+            query = `${param}`;
+        } else {
+            query = `?${selectedParam}=${param}`;
+        }
+
+    return query;
+}
+
+// Login & Signup
+
+export const login = async (userCredentials) => (
+    await fetch(`${BASE_URL}/logic/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            "username": username,
-            "password": password
-        })
+        body: JSON.stringify(userCredentials)
     })
         .then(response => {
             if (response.ok){
@@ -25,27 +37,93 @@ export const login = async (username, password) => {
         .catch(error => {
             console.error(JSON.stringify(error));
         })
-}
+)
+
+export const signup = async (userCredentials) => (
+    await fetch(`${BASE_URL}/logic/api/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userCredentials)
+    })
+        .then(response => {
+            if (response.ok){
+                return response.json();
+            } else {
+                throw response;
+            }
+        })
+)
+
 
 // GET methods
 
-export const getOffers = async (ownerId) => {
-    return await fetch(`${BASE_URL}/offers?${ownerId ? `ownerId=${ownerId}` : ""}`, {
+export const getOffers = async (token, selectedParam, queryParams) => {
+    const params = convertToQuery(selectedParam, queryParams);
+    return await fetch(`${BASE_URL}/logic/api/offers/${params}`, {
         headers: {
-            Authorization: `Bearer ${JWT}`
+            Authorization: `Bearer ${token}`
         }
     })
+    .then(response => {
+        if (response.ok){
+            return response.json();
+        } else {
+            throw response;
+        }
+    })
+    .catch(error => {
+        console.error(JSON.stringify(error));
+    })
+}
+
+export const getOfferImages = async (token, offerUuid) => {
+    const images = [];
+
+    const imagesData = await fetch(`${BASE_URL}/logic/api/offerImages?offerUuid=${offerUuid}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (response.ok){
+            return response.json();
+        } else {
+            throw response;
+        }
+    })
+    .catch(error => {
+        console.error(JSON.stringify(error));
+    })
+    
+    for (const imageData of imagesData) {
+        const image = await fetch(`${BASE_URL}/logic/api/offerImages/${imageData.offerImageUuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         .then(response => {
-            if (response.ok){
-                return response.json();
+            if (response.ok) {
+                return response.blob();
             } else {
                 throw response;
             }
         })
+        .then(blob => {
+            return URL.createObjectURL(blob);
+        })
         .catch(error => {
             console.error(JSON.stringify(error));
-        })
+        });
+        
+        images.push(image);
+    }
+    
+    return images;
 }
+
+/////////////////////////////////////////
+/* DOWN FROM HERE WE HAVE TO CHANGE!!! */
+/////////////////////////////////////////
 
 export const getBookings = async (ownerId, offerId) => {
     return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`)
@@ -102,7 +180,7 @@ export const postBooking = async (offerId, bookings) => {
 // PUT methods
 
 export const putOffer = async (offerId, offer) => {
-    return await fetch(`${BASE_URL}/offers?offerId=${offerId}`, {
+    return await fetch(`${BASE_URL}/logic/api/offers?offerUuid=${offerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(offer)

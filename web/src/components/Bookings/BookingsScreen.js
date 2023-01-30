@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import LoggedHeader from './LoggedHeader';
 import BookingItem from './BookingItem';
 
-import { getBookings } from './utils/apiCalls'
+import { getBookings } from '../utils/apiCalls'
  
-import './styles.css';
+import '../styles.css';
 
 function BookingsScreen() {
     const [bookings, setBookings] = useState([]);
@@ -37,7 +36,6 @@ function BookingsScreen() {
 
     return (
         <div>
-            <LoggedHeader/>
             <h2>Your Bookings:</h2>
             <div>
                 {bookings.map(_booking => {

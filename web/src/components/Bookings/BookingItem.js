@@ -1,7 +1,8 @@
 import React from 'react';
-import img from '../img.jpg'
+import { Link } from 'react-router-dom';
+import img from '../../img.jpg'
 
-import './styles.css'
+import '../styles.css'
 
 function BookingItem(props) {
     return (
@@ -13,7 +14,7 @@ function BookingItem(props) {
                     <p className='text'><b>Start Date:</b> {props.booking.startDate}</p>
                     <p className='text'><b>End Date:</b> {props.booking.endDate}</p>
                 </div>
-                <input type="button" className='search-btn' id='viewBooking-btn' value="View"/>
+                <Link to={`/bookingsview/${props.booking.uuid}`} id='viewBooking-btn'><input type="button" className='search-btn' value="View"/></Link>
             </div>
         </div>
     )
