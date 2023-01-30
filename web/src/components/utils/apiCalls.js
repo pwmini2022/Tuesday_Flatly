@@ -6,15 +6,15 @@ const convertToQuery = (selectedParam, param) => {
     if (!selectedParam || !param)
         return query;
 
-    if (selectedParam == "dateFrom" || selectedParam == "dateTo" || selectedParam == "numberOfAdults" 
+    if (selectedParam == "dateFrom" || selectedParam == "dateTo" || selectedParam == "numberOfAdults"
         || selectedParam == "numberOfAdults") {
-            if (!isNaN(parseInt(param)))
-                query = `?${selectedParam}=${parseInt(param)}`;
-        } else if (selectedParam == "uuid") {
-            query = `${param}`;
-        } else {
-            query = `?${selectedParam}=${param}`;
-        }
+        if (!isNaN(parseInt(param)))
+            query = `?${selectedParam}=${parseInt(param)}`;
+    } else if (selectedParam == "uuid") {
+        query = `${param}`;
+    } else {
+        query = `?${selectedParam}=${param}`;
+    }
 
     return query;
 }
@@ -28,7 +28,7 @@ export const login = async (userCredentials) => (
         body: JSON.stringify(userCredentials)
     })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
             } else {
                 throw response;
@@ -46,7 +46,7 @@ export const signup = async (userCredentials) => (
         body: JSON.stringify(userCredentials)
     })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
             } else {
                 throw response;
@@ -64,16 +64,16 @@ export const getOffers = async (token, selectedParam, queryParams) => {
             Authorization: `Bearer ${token}`
         }
     })
-    .then(response => {
-        if (response.ok){
-            return response.json();
-        } else {
-            throw response;
-        }
-    })
-    .catch(error => {
-        console.error(JSON.stringify(error));
-    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw response;
+            }
+        })
+        .catch(error => {
+            console.error(JSON.stringify(error));
+        })
 }
 
 export const getOfferImages = async (token, offerUuid) => {
@@ -84,40 +84,40 @@ export const getOfferImages = async (token, offerUuid) => {
             Authorization: `Bearer ${token}`
         }
     })
-    .then(response => {
-        if (response.ok){
-            return response.json();
-        } else {
-            throw response;
-        }
-    })
-    .catch(error => {
-        console.error(JSON.stringify(error));
-    })
-    
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw response;
+            }
+        })
+        .catch(error => {
+            console.error(JSON.stringify(error));
+        })
+
     for (const imageData of imagesData) {
         const image = await fetch(`${BASE_URL}/logic/api/offerImages/${imageData.offerImageUuid}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
-        .then(response => {
-            if (response.ok) {
-                return response.blob();
-            } else {
-                throw response;
-            }
-        })
-        .then(blob => {
-            return URL.createObjectURL(blob);
-        })
-        .catch(error => {
-            console.error(JSON.stringify(error));
-        });
-        
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw response;
+                }
+            })
+            .then(blob => {
+                return URL.createObjectURL(blob);
+            })
+            .catch(error => {
+                console.error(JSON.stringify(error));
+            });
+
         images.push(image);
     }
-    
+
     return images;
 }
 
@@ -125,10 +125,14 @@ export const getOfferImages = async (token, offerUuid) => {
 /* DOWN FROM HERE WE HAVE TO CHANGE!!! */
 /////////////////////////////////////////
 
-export const getBookings = async (ownerId, offerId) => {
-    return await fetch(`${BASE_URL}/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`)
+export const getBookings = async (token, ownerId, offerId) => {
+    return await fetch(`${BASE_URL}/logic/api/bookings?${ownerId ? `ownerId=${ownerId}&` : ""}${offerId ? `offerId=${offerId}` : ""}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
             } else {
                 throw response;
@@ -141,16 +145,19 @@ export const getBookings = async (ownerId, offerId) => {
 
 // POST methods
 
-export const postOffer = async (ownerId, offers) => {
-    return await fetch(`${BASE_URL}/offers?ownerId=${ownerId}`, {
+export const postOffer = async (token, ownerId, offers) => {
+    return await fetch(`${BASE_URL}/logic/api/offers/${ownerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(offers)
+        body: JSON.stringify(offers),
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
-            } else {    
+            } else {
                 throw response;
             }
         })
@@ -159,14 +166,17 @@ export const postOffer = async (ownerId, offers) => {
         })
 }
 
-export const postBooking = async (offerId, bookings) => {
-    return await fetch(`${BASE_URL}/bookings?offerId=${offerId}`, {
+export const postBooking = async (token, offerId, bookings) => {
+    return await fetch(`${BASE_URL}/logic/api/bookings/${offerId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bookings)
+        body: JSON.stringify(bookings),
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
             } else {
                 throw response;
@@ -179,14 +189,17 @@ export const postBooking = async (offerId, bookings) => {
 
 // PUT methods
 
-export const putOffer = async (offerId, offer) => {
-    return await fetch(`${BASE_URL}/logic/api/offers?offerUuid=${offerId}`, {
+export const putOffer = async (token, offerId, offer) => {
+    return await fetch(`${BASE_URL}/logic/api/offers/${offerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(offer)
+        body: JSON.stringify(offer),
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
             } else {
                 throw response;
@@ -197,14 +210,17 @@ export const putOffer = async (offerId, offer) => {
         })
 }
 
-export const putBooking = async (bookingId, booking) => {
-    await fetch(`${BASE_URL}/bookings?bookingUuid=${bookingId}`, {
+export const putBooking = async (token, bookingId, booking) => {
+    await fetch(`${BASE_URL}/logic/api/bookings/${bookingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(booking)
+        body: JSON.stringify(booking),
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
             } else {
                 throw response;
@@ -217,12 +233,15 @@ export const putBooking = async (bookingId, booking) => {
 
 // DELETE methods
 
-export const deleteOffer = async (offerId) => {
-    await fetch(`${BASE_URL}/offers?offerId=${offerId}`, {
-        method: 'DELETE'
+export const deleteOffer = async (token, offerId) => {
+    await fetch(`${BASE_URL}/logic/api/offers/${offerId}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
             } else {
                 throw response;
@@ -233,12 +252,15 @@ export const deleteOffer = async (offerId) => {
         })
 }
 
-export const deleteBooking = async (bookingId) => {
-    await fetch(`${BASE_URL}/bookings?bookingUuid=${bookingId}`, {
-        method: 'DELETE'
+export const deleteBooking = async (token, bookingId) => {
+    await fetch(`${BASE_URL}/logic/api/bookings/${bookingId}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     })
         .then(response => {
-            if (response.ok){
+            if (response.ok) {
                 return response.json();
             } else {
                 throw response;
