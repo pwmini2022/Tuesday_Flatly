@@ -19,7 +19,6 @@ import static pw.react.backend.utils.MySimpleUtils.intevalIsValid;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 class OfferService implements IOfferService {
     private final Logger logger = LoggerFactory.getLogger(BookingService.class);
